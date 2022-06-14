@@ -1,1 +1,0 @@
-{"modules":[{"title":"enum_windows_net_user","des":"enumration local users","command":"net user"},{"title":"Start_powershell","des":"start powershell ","command":"Powershell"},{"title":"whoami","des":"whoami command ","command":"whoami"}]}
