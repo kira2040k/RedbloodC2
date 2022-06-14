@@ -252,7 +252,6 @@ function ipdata_check_ip(ip){
             if(!config.settings.block_proxy && !config.settings.block_anonymous && !config.settings.block_tor){
                 resolve(false)
             }
-    // let api_key = "0b977b9b9dbf4ca3627bc7d5d1aaf0b42bc5527ef86fc1c26ae774e9"
     axios.get(`https://api.ipdata.co/${ip}?api-key=${process.env.ipdata_APIKEY}`).then(res=>{
     if(config.settings.block_tor){
         if(res.data.threat.is_tor){

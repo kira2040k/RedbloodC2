@@ -41,9 +41,16 @@ password: admin
 |Sessions chart 📊 |❌      |✔️|
 
 
+## notes:
+
+change the password of admin account and in .env file add your ipdata api key and change session vaible to something random 
+
+
 # Screenshots
 <img src="images/index.png">
 
 ------------------------------------------------------------------------------
 
 <img src="images/profile.png">
+
+
