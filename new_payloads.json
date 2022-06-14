@@ -1,0 +1,1 @@
+{"modules":[{"title":"enum_windows_net_user","command":"net user"},{"title":"enum_windows_whoami","command":"whoami"},{"title":"enum_windows_whoami2","command":"net user"},{"title":"a","des":"b","command":"c"}]}

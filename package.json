@@ -1,0 +1,54 @@
+{
+  "name": "reverse-shell-listener",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node pm2.js",
+    "monitor": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nemanjan00/reverse-shell-listener.git"
+  },
+  "author": "Nemanja Nedeljković <nemanjan00@gmail.com> (https://nemanja.top/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nemanjan00/reverse-shell-listener/issues"
+  },
+  "homepage": "https://github.com/nemanjan00/reverse-shell-listener#readme",
+  "devDependencies": {
+    "angular": "^1.6.1",
+    "angular-terminal": "git+https://github.com/nemanjan00/angular-terminal.git",
+    "angular-websocket": "^2.0.1",
+    "bootstrap": "^3.3.7",
+    "css-loader": "^0.26.1",
+    "file-loader": "^0.9.0",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.1.1",
+    "jquery.mousewheel": "^3.1.9",
+    "jquery.terminal": "^0.11.23",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.14.0",
+    "webpack-livereload-plugin": "^0.10.0"
+  },
+  "dependencies": {
+    "aes-encryption": "^1.0.4",
+    "ansi-to-html": "^0.7.2",
+    "axios": "^0.27.2",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "express-ws": "^2.0.0",
+    "is-base64": "^1.1.0",
+    "netcat": "^1.5.0",
+    "pm2": "^2.10.4",
+    "randomstring": "^1.2.1",
+    "sqlite3": "^5.0.2",
+    "strip-ansi": "^7.0.1",
+    "xss": "^1.0.10"
+  }
+}

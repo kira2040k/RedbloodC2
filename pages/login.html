@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>login page</title>
+    <link rel="stylesheet" href="assets/login.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="form">
+          <form class="login-form" method="post" action="">
+            <input type="text"  name=username placeholder="username"/>
+            <input type="password" name=password placeholder="password"/>
+            <button>login</button>
+            <p style="display:none" id="status">username or password is incorrect</p>
+          </form>
+        </div>
+      </div>
+      <script>
+        const params = new URLSearchParams(window.location.search)
+        if(params.get("status") == "wrong"){
+          document.getElementById("status").style.color = "white";
+
+          document.getElementById("status").style.display = "";
+        }
+
+      </script>
+</body>
+</html>
