@@ -1,4 +1,4 @@
-# Redblood C2 
+# Public version of Redblood C2 
 ```
 This is a simple command and control server to handle sessions and your victims
 
