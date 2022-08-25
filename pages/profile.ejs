@@ -64,6 +64,7 @@
                                 </div>
                                 <button class="button-34" role="button" onclick="open_change_password_form()">change password</button>
                                 <button class="button-34" role="button" onclick="open_auto_command()">add custom auto command</button>
+                                <button class="button-34" role="button" onclick="open_autoit()">create autoit shell</button>
 
                             </div>
                             <div class="col-sm-8">
@@ -88,7 +89,20 @@
                                     <input class="input-change-password" type=text id="auto_command_command" placeholder="command...">
                                     <button class="button-62" role="button" onclick="auto_command_send()">Submit</button>
                                 </div>
-                              
+                                <div id="open_autoit_div" style="display:none" method="post">
+                                    <br>
+                                        <div class="success-msg" id="change_password_status" style="display:none">
+                                            <i id="change_password_message"></i>
+                                            
+                                          </div>
+                                    <input class="input-change-password" type=text id=powershell_link placeholder="powershell link" ><br><br>
+                                    <button class="button-62" role="button" onclick="autoit_run()">Submit</button>
+                                    <br>
+                                    <textarea id="textarea_form" class="form-control">
+
+                                        
+                                    </textarea>
+                                </div>
                                 </div>
                             </div>
                         </div>
