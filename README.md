@@ -43,8 +43,13 @@ password: admin
 
 ## notes:
 
-change the password of admin account and in .env file add your ipdata api key and change session vaible to something random 
+Change the password of admin account and in .env file add your ipdata api key and change session vaible to something random 
 
+and you can edit config.js to specify block type
+
+
+
+------------------------------------------------------------------------------
 
 # Screenshots
 <img src="images/index.png">
