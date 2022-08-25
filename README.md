@@ -39,7 +39,7 @@ password: admin
 |block vpn and tor connections 🧅 |✔️      |✔️|
 |manage users and sessions 📃|❌      |✔️|
 |Sessions chart 📊 |❌      |✔️|
-
+|FUD autoit shell |✔️      |✔️|
 
 ## notes:
 
