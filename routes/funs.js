@@ -51,14 +51,17 @@ function login_db(username, password, callback) {
 }
 
 function get_total_session_by_username(username, callback) {
+    return new Promise(resolve => {
+
     db.all("SELECT COUNT(session_number) FROM sessions WHERE username = (?)", [username], (err, rows) => {
         if (rows.length > 0) {
             let return_rows = Object.values(rows[0])[0]
-            callback(return_rows)
+            resolve(return_rows)
         } else {
-            callback(false)
+            resolve(false)
         }
     });
+})
 
 
 }
@@ -275,9 +278,82 @@ function ipdata_check_ip(ip){
 }catch(e){resolve(false)}
 });
 }
+class command_param{
+    param1(command,args){
+        try{
+            let c1 = /(kiraC1_.*_kiraC1)/.exec(command)[0]
+            
+            if(c1){
+                    c1 = c1.replace("kiraC1_","").replace("_kiraC1","")
+                    command = command.replace(/(kiraC1_.*_kiraC1)/,args[0].replace("\n",""))
+                    if(args.length > 0){
+                        return this.params2(command,args)
+                    }else{
+                        return command
+                    }
+                }
+            }catch(e){
+                return command
+            }
+    }
+    params2(command,args){
+        
+        let c1 = /(kiraC2_.*_kiraC2)/.exec(command)[0]
+        try{
+ 
+        if(c1){
+                c1 = c1.replace("kiraC2_","").replace("_kiraC2","")
+                command = command.replace(/(kiraC2_.*_kiraC2)/,args[1].replace("\n",""))
+                if(args.length > 1){
+                    return this.params3(command,args)
+                }else{
+                    return command
 
+                }
+            }
+        }catch(e){
+            return command
+        }
+    }
+    params3(command,args){
+        
+        let c1 = /(kiraC3_.*_kiraC3)/.exec(command)[0]
+        try{
+ 
+        if(c1){
+                c1 = c1.replace("kiraC3_","").replace("_kiraC3","")
+                command = command.replace(/(kiraC3_.*_kiraC3)/,args[2].replace("\n",""))
+                    return command
+            }
+        }catch(e){
+            return command
+        }
+    }
+}
+function run_command(command){
+    return new Promise(resolve => {
+
+    let  split_command = command.split(" ")
+    let args = split_command.slice(2,10)
+    if(split_command[0] == "run"){
+        get_command_by_title(split_command[1].replace(/\s/gi,""),data=>{
+            if(data.length == 0) {
+                resolve(command)
+                return
+            }
+            const handle_command = new command_param();
+            const res = handle_command.param1(data[0].command,args)
+            resolve(res)
+        })
+        
+    }else{
+        resolve(command)
+    }
+})
+}
 
 module.exports = {
+    run_command,
     execute_command,
     login_db,
     isValidHttpUrl,

@@ -71,6 +71,14 @@ function run_command(){
                 response = response.replace(/(kiraC1_.*_kiraC1)/,c1)
             }
         }catch(e){}
+        try{
+            let c2 = /(kiraC2_.*_kiraC2)/.exec(response)[0]
+            if(c2){
+                    c2 = c2.replace("kiraC2_","").replace("_kiraC2","")
+                    c2 = prompt(c2, "");
+                    response = response.replace(/(kiraC2_.*_kiraC2)/,c2)
+                }
+            }catch(e){}
         send_auto_command(response,get_number_of_shell())
     })
 }

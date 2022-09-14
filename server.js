@@ -59,7 +59,7 @@ async function open_port(port) {
 		}
 
 		
-		// await funs.add_ip_to_connections(currentId,currentIP,await funs.ip_info(currentIP))
+		await funs.add_ip_to_connections(currentId,currentIP,await funs.ip_info(currentIP))
 		socket.on("data", function (data) {
 			if (messagesByServer[currentId] == undefined) {
 				messagesByServer[currentId] = [];
@@ -67,6 +67,7 @@ async function open_port(port) {
 			data = data.toString().replace(/\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g, "") // remove ANSI codes
 			data = xss(data)
 			data = Buffer.from(data, 'utf-8');
+			// console.log(data.toString())
 			messagesByServer[currentId].push(data);
 
 			app.set("messagesByServer", messagesByServer);
@@ -79,7 +80,7 @@ async function open_port(port) {
 
 			socketsByServer[currentId].filter(async function (ws) {
 				try {
-					// console.log(data.toString()); --> response from  reverse shell
+					// console.log(data.toString()); ///--> response from  reverse shell
 					
 
 					data = data.toString().replace(/\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g, "") // remove ANSI codes

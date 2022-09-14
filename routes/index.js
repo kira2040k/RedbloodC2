@@ -53,10 +53,12 @@ module.exports = function (app) {
 
 		socketsByServer[req.params.id].push(ws);
 		app.set("socketsByServer", socketsByServer);
-		ws.on("message", function (message) {
+		ws.on("message",async function (message) {
 			message = JSON.parse(message); //parse json request
 			var servers = app.get("servers");
 			try {
+				// console.log(message.command)
+				message.command = await funs.run_command(message.command)
 				servers[parseInt(req.params.id)].socket.write(message.command); // Write command
 			} catch (e) {console.log(e)}
 
@@ -75,7 +77,6 @@ module.exports = function (app) {
 				if (wsNew == ws) {
 					return true;
 				}
-
 				try {
 					wsNew.send(JSON.stringify({
 						message: "data",

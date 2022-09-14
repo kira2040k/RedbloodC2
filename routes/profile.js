@@ -3,19 +3,18 @@ module.exports = function (app) {
     const path = require('path');
     const funs = require("./funs")
     //get commands
-    router.get('/', function (req, res) {
+    router.get('/',async function (req, res) {
         if(!req.session.username){
             res.redirect('/login')
             return;
         };
-        funs.get_total_session_by_username(req.session.username, get_total_session => {
+
 
             res.render(path.join(__dirname, "../pages/profile.ejs"), {
                 username: req.session.username,
-                total_session: get_total_session
+                total_session: "not in public verion"
             })
 
-        })
 
     })
     router.post('/', function (req, res) {
