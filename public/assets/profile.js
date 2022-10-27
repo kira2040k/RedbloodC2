@@ -68,7 +68,104 @@ function autoit_run(){
     text = text.replace("powershell_link",document.getElementById("powershell_link").value)
     document.getElementById("textarea_form").innerHTML = text 
 }
+function open_on_connection_command(){
+    let form = document.getElementById('open_on_connection_div');
+    if(form.style.display == "block") form.style.display = "none";
+    else form.style.display = 'block';
+}
 
+function open_on_connection_command_add(){
+    let form = document.getElementById('open_on_connection_command_add_div');
+    if(form.style.display == "block") form.style.display = "none";
+    else form.style.display = 'block';
+}
+
+function on_connection_command_add_send(){
+
+
+const xhttp = new XMLHttpRequest();
+
+    xhttp.open("POST", "/apis/add_on_connection_command", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    const title = document.getElementById("on_connection_command_add_title").value
+    const des = document.getElementById("on_connection_command_add_des").value
+    const command = document.getElementById("on_connection_command_add_command").value
+
+    xhttp.send(`title=${title}&des=${des}&command=${command}`);
+
+    xhttp.onload = function() {
+        if(this.responseText == "done"){
+            document.getElementById("on_connection_command_status").style.display = ""
+            document.getElementById("on_connection_command_message").innerHTML = "The command was successfully added"
+             
+        }
+    }
+
+
+}
+function on_connection_command_delete_send(){
+
+
+    const xhttp = new XMLHttpRequest();
+    
+        xhttp.open("POST", "/apis/delete_on_connection_command", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        const id = document.getElementById("on_connection_command_delete_id").value
+    
+        xhttp.send(`id=${id}`);
+    
+        xhttp.onload = function() {
+            if(this.responseText == "done"){
+                document.getElementById("on_connection_command_status").style.display = ""
+                document.getElementById("on_connection_command_message").innerHTML = "The command was successfully deleted"
+                 
+            }
+        }
+    
+    
+    }
+function open_on_connection_command_list(){
+    let form = document.getElementById('open_on_connection_command_list_div');
+    if(form.style.display == "block") form.style.display = "none";
+    else form.style.display = 'block';
+}
+function open_on_connection_command_delete(){
+    let form = document.getElementById('open_on_connection_command_delete_div');
+    if(form.style.display == "block") form.style.display = "none";
+    else form.style.display = 'block';
+}
+function open_auto_command_add_div(){
+    let form = document.getElementById('auto_command_add_div');
+    if(form.style.display == "block") form.style.display = "none";
+    else form.style.display = 'block';
+
+}
+function open_auto_command_list_div(){
+    let form = document.getElementById('auto_command_list_div');
+    if(form.style.display == "block") form.style.display = "none";
+    else form.style.display = 'block';
+
+}
+function open_auto_command_delete_div(){
+    let form = document.getElementById('auto_command_delete_div');
+    if(form.style.display == "block") form.style.display = "none";
+    else form.style.display = 'block';
+
+}
+function auto_command_delete_send(){
+    const xhttp = new XMLHttpRequest();
+    let form = document.getElementById('auto_command_delete_title');
+    const title = document.getElementById('auto_command_delete_title').value;
+    xhttp.open("GET", `/apis/delete_auto_command?title=${title}`, true);
+    xhttp.send()
+    xhttp.onload = function() {
+        if(this.responseText == "done"){
+            document.getElementById("auto_command_status").style.display = ""
+            document.getElementById("auto_command_message").innerHTML = "The command was deleted."
+             
+        }
+    }
+}
 
 function auto_command_send(){
 
@@ -89,5 +186,4 @@ function auto_command_send(){
     }
 
 }
-
 

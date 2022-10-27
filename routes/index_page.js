@@ -8,13 +8,12 @@ module.exports = function(app) {
         saveUninitialized: false,
         resave: false
     }));
-router.get('/', function (req, res) {
-    let sess = req.session
-    if(sess.username){
-    res.sendFile('index.html', { root: path.join(__dirname, '../pages/') });      
-    }else{
-        res.redirect("/login")
-    }
+    const config = require('../config')
+    const funs = require('./funs');
+router.get('/',funs.check_login_user, async function (req, res) {
+    const notes = [[{username:"kira",note:"kira note",id:1},{username:"bassam",note:"bassam note",id:2}]]
+    res.render(path.join(__dirname, "../pages/index.ejs"), {settings:config.settings,notes:notes})
+    // res.sendFile('index.html', { root: path.join(__dirname, '../pages/') });      
     
 
 })

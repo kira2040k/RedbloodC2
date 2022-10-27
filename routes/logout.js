@@ -4,7 +4,8 @@ module.exports = function (app) {
     const funs = require("./funs")
     //get commands
     router.get('/', function (req, res) {
-       req.session.destroy();
+        res.clearCookie("session");
+
         res.redirect("/login")
     })
    

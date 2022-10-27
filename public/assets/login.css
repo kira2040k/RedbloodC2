@@ -27,10 +27,11 @@
   box-sizing: border-box;
   font-size: 14px;
 }
-.form button {
+.form input[type="a"] {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
+  text-align: center;
   background: rgb(157, 1, 1);
   width: 100%;
   border: 0;

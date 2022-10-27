@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="top.nemanja.reverse-shell-listener">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" href="../../favicon.ico">
+	<link rel="stylesheet" href="/assets/index.css">
+	
+    <link rel="stylesheet" href="../assets/profile.css">
+
+	<title>RedBlood C2</title>
+</head>
+<script>
+	setInterval(function () {
+		var elements = document.getElementsByClassName('cmd'); // get all elements
+		const font = document.getElementById("terminal_colorr").getAttribute("f")
+
+		for (var i = 0; i < elements.length; i++) {
+			elements[i].style.backgroundColor = document.getElementById("terminal_colorr").getAttribute("c");
+
+		}
+		
+		
+
+
+	}, 200)
+</script>
+<body ng-controller="MainController" style=background-color:<%= settings.colors.index_background %>>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+					aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#" id="terminal_colorr"
+					c="<%= settings.colors.terminal_background_color %>">RedBlood C2</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/logout"> Log out</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/profile">Profile</a></li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar"
+				style=background-color:<%= settings.colors.shell_list_backgound_color %>>
+				<ul class="nav nav-sidebar">
+					<li class="header"><a>Shell list</a></li>
+					<li ng-class="{active: currentShellId == key}" ng-repeat="(key, shell) in shells | notDead"><a
+							ng-click="selectShell(key)">{{shell.ip}} #{{key}}
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+					<li ng-show="!haveNonDeadShells()"><a>No shells</a></li>
+					<% if (settings.offline_shells) { %>
+
+					<li class="header"><a>Offline shell list</a></li>
+					<li ng-class="{active: currentShellId == key}" ng-repeat="(key, shell) in shells | dead"><a
+							ng-click="selectShell(key)">{{shell.ip}} #{{key}} &nbsp;&nbsp;&nbsp;&nbsp;<button class="button"  id="{{key}}" onclick="delete_offline_shell(this.id)">hide</button></a> </li>
+					<li ng-show="!haveDeadShells()"><a>No shells</a></li>
+					<% } %>
+
+				</ul>
+			</div>
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<h1 class="page-header" style=color:white>Shell - {{currentShell.ip}} #{{currentShellId}} </h1> <span
+					ng-show="shellSelected()" hidden>#{{currentShellId}}</span></h1>
+				<div class="autocomplete" style="width:300px;">
+					<input list="commands_datalist"
+						style="padding: 10px;font-size: 17px;border: 1px solid grey;float: left;width: 80%;background: rgb(95, 94, 94);color:#FFFF;"
+						type="text" id="command_search" placeholder="Search.." name="search2">
+					<datalist id="commands_datalist">
+					</datalist>
+
+					<button onclick="run_command()" title="select any module and click on the bug after that command will execute"
+						style="float: left;width: 20%;padding: 10px;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;"
+						type="submit"><img src="https://cdn-icons-png.flaticon.com/24/78/78946.png"></button>
+
+				</div>
+				<button onclick="disconnect_shell()"
+					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;"
+					type="submit"><img src="/assets/disconnect.png">
+					disconnect</button>
+				<button onclick="open_notes()" title="add notes to this session for example admin password"
+					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
+					type="submit">📝 notes</button>
+					<button onclick="open_obfuscate_path()" title="obfuscate paths to confuse blue teamer (Powershell only)"
+					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
+					type="submit"> obfuscate path</button>
+					<div id="obfuscate_path_div"  style="display:none">
+						<br><br><br><br><br>
+						<div style="display: flex;
+						justify-content: center;
+						align-items: center;">
+						<br><br><br>
+						<input class="input-change-password" style="height: 33px ;width: 35%;" type=text id="obfuscate_path_id">&nbsp;&nbsp;
+						<button onclick="click_obfuscate_path()"
+						style="background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none" type="submit">obfuscate</button>
+					</div>
+					</div>
+					<div id="notes_div" style="display:none">
+					<br><br><br><br><br>
+					<div style="display: flex;
+					justify-content: center;
+					align-items: center;">
+					<br><br><br>
+					<button onclick="add_note()"
+					style="background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none" type="submit">📝 add note</button>
+				</div>
+					<table id="notes_table">
+						<tr >
+							<th class="table_color">username</th>
+							<th class="table_color">note</th>
+							<th class="table_color">action</th>
+
+						</tr>
+						<tr>
+						</tr>
+					</table>
+				</div>
+				<br><br><br>
+				<div id="command_des_div" style="display:none">
+					<p style="font-size:20px;color: white">Description:</p>
+					<p id=command_des_message style="color:white"></p>
+					<p style="display:none" id=command_to_copy></p>
+					<button class="button-35" role="button" onclick="copy_command()">Copy command</button><br><br>
+				</div>
+
+				<div style="height: 150%;width: 100%;color:<%= settings.colors.terminal_color %>;background-color:<%= settings.colors.terminal_background_color %>;"
+					class="terminal-container fluid" angular-terminal="main" prompt=" " ng-show="!shellSelected()"
+					greetings=" <- Please, select shell "></div>
+				<div style="height: 150%;width: 100%;" ng-repeat="(key, shell) in shells"
+					class="terminal-container fluid" angular-terminal="main-{{key}}" ng-show="currentShellId == key"
+					greetings=""></div>
+			</div>
+		</div>
+	</div>
+	<script defer src="/assets/main.js"></script>
+	<script  defer src="/assets/bundle.js"></script>
+
+
+</body>
+</body>
+
+</html>

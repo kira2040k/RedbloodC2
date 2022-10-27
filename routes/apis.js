@@ -19,26 +19,22 @@ module.exports = function (app) {
         extended: true
     }));
     //get commands
-    router.get('/', function (req, res) {
-        if(!req.session.username) return;
+    router.get('/', funs.check_login_user,async function (req, res) {
         if (req.query.title == "") {
-            funs.get_all_commands_db(data => {
-                res.send(data)
-            })
+            const data = await funs.get_all_commands_db()
+        res.send(data)
         } else {
             funs.get_command_by_title(req.query.title, (data) => {
                 res.send(data)
             })
         }
     })
-    router.get('/all_ip_connections', async function (req, res) {
-        if(!req.session.username) return;
+    router.get('/all_ip_connections',funs.check_login_user, async function (req, res) {
 
         const response = await funs.all_country_connections()
         res.json(response)
     })
-    router.get('/add_auto_command', function (req, res) {
-        if(!req.session.username) return;
+    router.get('/add_auto_command',funs.check_login_user, function (req, res) {
 
         funs.add_command(req.query.title, req.query.des, req.query.command, (data) => {
             if (data) {
@@ -54,50 +50,74 @@ module.exports = function (app) {
    
     
    
-    router.get('/all_data', function (req, res) {
-        if(!req.session.username) return;
+    router.get('/all_data',funs.check_login_user, function (req, res) {
 
         funs.all_data(data => {
             res.send(data)
         })
 
     })
-    router.get('/ip_by_id/:id', async function (req, res) {
-        if(!req.session.username) return;
+    router.get('/ip_by_id/:id',funs.check_login_user, async function (req, res) {
         let response = await funs.ip_by_id(req.params.id)
         res.send(response)
     })  
     // country_by_id
-    router.get('/country_by_id/:id', async function (req, res) {
-        if(!req.session.username) return;
+    router.get('/country_by_id/:id',funs.check_login_user, async function (req, res) {
         let response = await funs.country_by_id(req.params.id)
         res.send(response)
     }) 
     
     
-    router.get('/get_users_by_session_id/:id',async function (req, res) {
-        if(!req.session.username) return;
+    router.get('/get_users_by_session_id/:id',funs.check_login_user,async function (req, res) {
         // let sessions =  await funs.get_total_sessions()
         let users = await funs.get_users_by_sesison_number(parseInt(req.params.id))
         res.send(`${users}`)
 
     })
-    router.get('/total_sessions',async function (req, res) {
-        if(!req.session.username) return;
+    router.get('/total_sessions',funs.check_login_user,async function (req, res) {
         let sessions =  await funs.get_total_sessions()
         res.send(`[${sessions}]`)
 
     })
-    router.get('/total_sessions_list_numbers',async function (req, res) {
-        if(!req.session.username) return;
+    router.get('/total_sessions_list_numbers',funs.check_login_user,async function (req, res) {
         let sessions =  await funs.get_total_sessions()
         res.send(`[${sessions}]`)
 
     })
-    router.get('/all_sessions', function (req, res) {
-        if(!req.session.username) return;
-
+    router.get('/delete_auto_command',funs.check_login_user, function (req, res) {
+        funs.delete_auto_command(req.query.title)
         res.send("done")
+
+    })
+    router.post('/add_on_connection_command',funs.check_login_user, function (req, res) {
+        funs.add_on_connection_command(req.body.title,req.body.des,req.body.command)
+        res.send("done")
+
+    })
+    router.post('/delete_on_connection_command',funs.check_login_user, function (req, res) {
+        funs.delete_on_connection_command(req.body.id)
+        res.send("done")
+
+    })
+    router.get('/delete_note',funs.check_login_user, function (req, res) {
+        funs.delete_note(req.query.id)
+        res.send("done")
+
+    })
+    router.post('/add_note',funs.check_login_user,async function (req, res) {
+        const token = req.cookies.session
+        const username = await funs.get_user_from_token(token)
+        const session = parseInt(req.body.session_id.replace(/\%20/ig,"").replace(/\%C2/ig,"").replace(/\%A0/ig,""))
+
+        console.log(username)
+        funs.add_note(username,req.body.note,session)
+        res.send("done")
+    })
+    router.get('/get_notes_by_id',async function (req, res) {
+        const session = parseInt(req.query.session_id)
+        const data = await funs.get_notes_by_id("0")
+
+         res.send(data)
 
     })
 

@@ -22,7 +22,21 @@ textarea {
 .user-card-full {
     overflow: hidden
 }
-
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
 .card {
     border-radius: 5px;
     -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
@@ -45,7 +59,7 @@ textarea {
 
 .bg-c-lite-green {
     background: -webkit-gradient(linear, left top, right top, from(#ec0909), to(#f70025));
-    background: linear-gradient(to right, #c90320, #a50803)
+    background: linear-gradient(to right, #030303, #a50803)
 }
 
 .user-profile {
@@ -148,9 +162,9 @@ h6 {
 
 /* CSS */
 .button-34 {
-  background: #d44521;
+  background: #270800;
   border-radius: 999px;
-  box-shadow: #c0795d 0 10px 20px -10px;
+  /* box-shadow: #c0795d 0 10px 20px -10px; */
   box-sizing: border-box;
   color: #FFFFFF;
   cursor: pointer;
@@ -174,7 +188,7 @@ h6 {
 
 /* CSS */
 .button-62 {
-  background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+  background: linear-gradient(to bottom right, #320009, #f11313);
   border: 0;
   border-radius: 12px;
   color: #FFFFFF;

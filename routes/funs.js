@@ -5,9 +5,20 @@ require('dotenv').config()
 const axios = require('axios');
 let db = new sqlite3.Database('./database.db', sqlite3.OPEN_READWRITE, (err) => {});
 var config = require('../config');
+const jwt = require('jsonwebtoken');
+var xss = require("xss");
+const zlib = require('zlib');
 
 const { exec} = require('child_process');
 const { env } = require('process');
+const { resolve } = require('path');
+
+
+
+function generateAccessToken(username) {
+    return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: config.settings.token_expire });
+  }
+
 
 function execute_command(command){
     
@@ -38,16 +49,20 @@ function change_user_password_db(username, password, callback) {
 }
 
 function login_db(username, password, callback) {
+    return new Promise(resolve => {
+
     var hash = crypto.createHash('sha512');
     password = hash.update(password, 'utf-8');
     password = password.digest('hex');
     db.all("SELECT * FROM users WHERE username = (?) AND password = (?)", [username, password], (err, rows) => {
         if (rows.length > 0) {
-            callback(true)
+            resolve(true)
         } else {
-            callback(false)
+            resolve(false)
         }
     });
+});
+
 }
 
 function get_total_session_by_username(username, callback) {
@@ -70,7 +85,6 @@ function get_total_sessions() {
 
     db.all("SELECT id FROM connections ", (err, rows) => {
         let found_sessions = []
-        // console.log(rows)
         if (rows.length > 0) {
             // let return_rows = Object.values(rows[0])[0]
             for(i=0;i<rows.length;i++) {
@@ -90,10 +104,28 @@ function get_total_sessions() {
 }
 
 
-function get_all_commands_db(callback) {
+function get_all_commands_db() {
+    return new Promise(resolve => {
+
     db.all("SELECT * FROM commands", (err, rows) => {
-        callback(rows)
+        resolve(rows)
     });
+});
+
+}
+const delete_auto_command = (title)=>{
+    return new Promise(resolve => {
+        db.run("DELETE FROM commands WHERE title=(?)",[title],function (err) {
+            if (err) {
+                console.log(err)
+               resolve(false)
+            } else {
+                
+                 resolve(true)
+            }
+        })
+    })
+
 }
 
 async function add_ip_to_connections(id,ip,country){
@@ -352,7 +384,195 @@ function run_command(command){
 })
 }
 
+const get_user_from_token = (token)=>{
+    return new Promise(resolve => {
+
+    jwt.verify(token, process.env.TOKEN_SECRET, (err,user)=> {
+        if (err){
+            resolve(err)
+        }
+        resolve(user.username)
+      })
+    })
+}
+
+const check_login_user =  (req,res,next) =>{
+        const token = req.cookies.session
+        if (token == null) return res.redirect("/login")
+        jwt.verify(token, process.env.TOKEN_SECRET, (err,user)=> {
+          if (err){
+            res.redirect("/login")
+          }else{
+            next()
+
+          }
+        })
+
+}
+
+const get_all_on_connection_commands = ()=>{
+    return new Promise(resolve => {
+
+    db.all("SELECT * FROM on_connection_command", (err, rows) => {
+        if (rows.length > 0) {
+            resolve(rows)
+        } else {
+            resolve(false)
+        }
+    });
+})
+}
+const add_on_connection_command = (title,description,command)=>{
+    return new Promise(resolve => {
+
+    db.run("INSERT INTO on_connection_command (title,description,command) VALUES (?,?,?)", [title, description, command], function (err) {
+        if (err) {
+            console.log(err)
+            resolve(false)
+        } else {
+            resolve(true)
+        }
+    });
+});
+
+}
+const delete_on_connection_command = (id)=>{
+    return new Promise(resolve => {
+        db.run("DELETE FROM on_connection_command WHERE id = (?)", [id], function (err) {
+            if (err) {
+                console.log(err)
+                resolve(false)
+            } else {
+            resolve(true)
+            }
+        });
+        })
+
+}
+const on_connection_command_run =async (socket)=>{
+    const commands = await get_all_on_connection_commands()
+    for(i = 0; i < commands.length; i++) {
+        socket.write(`${commands[i].command} \n`)
+    }
+    
+}
+
+const delete_note = async (id)=>{
+        return new Promise(resolve => {
+            db.run("DELETE FROM sessions_notes WHERE id = (?)", [id], function (err) {
+                if (err) {
+                    console.log(err)
+                    resolve(false)
+                } else {
+                resolve(true)
+                }
+            });
+            })
+    
+}
+const delete_all_note = async ()=>{
+    return new Promise(resolve => {
+        db.run("DELETE * sessions_notes", function (err) {
+            if (err) {
+                console.log(err)
+                resolve(false)
+            } else {
+            resolve(true)
+            }
+        });
+        })
+
+}
+const add_note = async (username,note,session)=>{
+    note = xss(note)
+    return new Promise(resolve => {
+        db.run("INSERT INTO sessions_notes (username,note,session_id) VALUES (?,?,?)", [username,note,session], function (err) {
+            if (err) {
+                console.log(err)
+                resolve(false)
+            } else {
+            resolve(true)
+            }
+        });
+        })
+
+}
+
+const get_notes_by_id = (id)=>{
+    return new Promise(resolve => {
+    db.all("SELECT * FROM sessions_notes WHERE session_id = (?)",[id], (err, rows) => {
+        if(err){
+            console.log(err)
+        }
+        if (rows.length > 0) {
+            resolve(rows)
+        } else {
+            resolve(false)
+        }
+    });
+})
+}
+
+function AES_encrypt(text,key,iv) {
+    iv = Buffer.from(iv,'hex')
+    key = Buffer.from(key,'hex')
+
+    let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
+ let encrypted = cipher.update(text);
+ encrypted = Buffer.concat([encrypted, cipher.final()]);
+ return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex'),key:key.toString('hex') };
+}
+
+function AES_decrypt(text,key,iv) {
+    iv = Buffer.from(iv, 'hex');
+key = Buffer.from(key,'hex')
+
+ let encryptedText = Buffer.from(text.encryptedData, 'hex');
+ let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
+ let decrypted = decipher.update(encryptedText);
+ decrypted = Buffer.concat([decrypted, decipher.final()]);
+ return decrypted.toString();
+}
+const gzip_compress = (compress_data)=>{
+    return new Promise(resolve => {
+        zlib.gzip(compress_data , (error, data) => {
+        
+            if(!error)
+            {
+              resolve(data)
+          }
+            else{
+              console.log(err);
+            }
+          
+          
+            if(!error)
+            {
+            }
+            else{
+              console.log(err);
+            }
+          
+          });
+  
+        
+    })
+        
+}
+
+const unzip = (compress_data)=>{
+    return new Promise(resolve => {
+        zlib.unzip(compress_data, (err, buffer) => {
+  
+            resolve(buffer.toString('utf8'));
+              
+            });
+    })
+        }
+
 module.exports = {
+    AES_encrypt,
+    AES_decrypt,
     run_command,
     execute_command,
     login_db,
@@ -373,5 +593,18 @@ module.exports = {
     get_total_sessions,
     get_users_by_sesison_number,
     sleep,
-    ipdata_check_ip
+    ipdata_check_ip,
+    check_login_user,
+    generateAccessToken,
+    get_user_from_token,
+    on_connection_command_run,
+    add_on_connection_command,
+    get_all_on_connection_commands,
+    delete_on_connection_command,
+    delete_auto_command,
+    delete_note,
+    add_note,
+    delete_all_note,
+    get_notes_by_id,
+    
 }

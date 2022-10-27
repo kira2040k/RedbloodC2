@@ -19,7 +19,8 @@ module.exports = function (app) {
 				id: server.id,
 				ip: server.ip,
 				dead: server.dead,
-				flag: await funs.ip_flag(server.ip)
+				flag: await funs.ip_flag(server.ip),
+				appear:server.appear
 			}));
 			
 			{
@@ -57,10 +58,9 @@ module.exports = function (app) {
 			message = JSON.parse(message); //parse json request
 			var servers = app.get("servers");
 			try {
-				// console.log(message.command)
 				message.command = await funs.run_command(message.command)
 				servers[parseInt(req.params.id)].socket.write(message.command); // Write command
-			} catch (e) {console.log(e)}
+			} catch (e) {}
 
 			app.set("servers", servers);
 

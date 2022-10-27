@@ -1,57 +1,57 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
+ (function(modules) { // webpackBootstrap
+ 	// The module cache
+ 	var installedModules = {};
 
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
+ 	// The require function
+ 	function __webpack_require__(moduleId) {
 
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
-/******/ 			return installedModules[moduleId].exports;
+ 		// Check if module is in cache
+ 		if(installedModules[moduleId])
+ 			return installedModules[moduleId].exports;
 
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
-/******/ 		};
+ 		// Create a new module (and put it into the cache)
+ 		var module = installedModules[moduleId] = {
+ 			exports: {},
+ 			id: moduleId,
+ 			loaded: false
+ 		};
 
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+ 		// Execute the module function
+ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
+ 		// Flag the module as loaded
+ 		module.loaded = true;
 
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
+ 		// Return the exports of the module
+ 		return module.exports;
+ 	}
 
 
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
+ 	// expose the modules object (__webpack_modules__)
+ 	__webpack_require__.m = modules;
 
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
+ 	// expose the module cache
+ 	__webpack_require__.c = installedModules;
 
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "assets/";
-/******/ 	// webpack-livereload-plugin
-/******/ 	(function() {
-/******/ 	  if (typeof window === "undefined") { return };
-/******/ 	  var id = "webpack-livereload-plugin-script";
-/******/ 	  if (document.getElementById(id)) { return; }
-/******/ 	  var el = document.createElement("script");
-/******/ 	  el.id = id;
-/******/ 	  el.async = true;
-/******/ 	  el.src = "http://localhost:35729/livereload.js";
-/******/ 	  document.getElementsByTagName("head")[0].appendChild(el);
-/******/ 	}());
+ 	// __webpack_public_path__
+ 	__webpack_require__.p = "assets/";
+ 	// webpack-livereload-plugin
+ 	(function() {
+ 	  if (typeof window === "undefined") { return };
+ 	  var id = "webpack-livereload-plugin-script";
+ 	  if (document.getElementById(id)) { return; }
+ 	  var el = document.createElement("script");
+ 	  el.id = id;
+ 	  el.async = true;
+ 	  //el.src = "http://localhost:35729/livereload.js";
+ 	  document.getElementsByTagName("head")[0].appendChild(el);
+ 	}());
 
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
-/******/ })
+ 	// Load entry module and return exports
+ 	return __webpack_require__(0);
+ })
 /************************************************************************/
-/******/ ([
+ ([
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -532,7 +532,7 @@
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "af7ae505a9eed503f8b8e6982036873e.woff2";
+	//module.exports = __webpack_require__.p + "af7ae505a9eed503f8b8e6982036873e.woff2";
 
 /***/ },
 /* 15 */
@@ -49834,6 +49834,7 @@
 	            var options = {
 	                finalize: function(div) {
 	                    div.addClass('command');
+						
 	                }
 	            };
 	            if ($.isFunction(prompt)) {
@@ -62074,7 +62075,6 @@
 	  Sha1.prototype._hash = function () {
 	    if(POOL.length < 100) POOL.push(this)
 	    var H = new Buffer(20)
-	    //console.log(this._a|0, this._b|0, this._c|0, this._d|0, this._e|0)
 	    H.writeInt32BE(this._a|0, A)
 	    H.writeInt32BE(this._b|0, B)
 	    H.writeInt32BE(this._c|0, C)
@@ -68996,42 +68996,15 @@
 	    s.matches++;
 	    /* Here, lc is the match length - MIN_MATCH */
 	    dist--;             /* dist = match distance - 1 */
-	    //Assert((ush)dist < (ush)MAX_DIST(s) &&
-	    //       (ush)lc <= (ush)(MAX_MATCH-MIN_MATCH) &&
-	    //       (ush)d_code(dist) < (ush)D_CODES,  "_tr_tally: bad match");
-
+	   
 	    s.dyn_ltree[(_length_code[lc] + LITERALS + 1) * 2]/*.Freq*/++;
 	    s.dyn_dtree[d_code(dist) * 2]/*.Freq*/++;
 	  }
 
-	// (!) This block is disabled in zlib defailts,
-	// don't enable it for binary compatibility
-
-	//#ifdef TRUNCATE_BLOCK
-	//  /* Try to guess if it is profitable to stop the current block here */
-	//  if ((s.last_lit & 0x1fff) === 0 && s.level > 2) {
-	//    /* Compute an upper bound for the compressed length */
-	//    out_length = s.last_lit*8;
-	//    in_length = s.strstart - s.block_start;
-	//
-	//    for (dcode = 0; dcode < D_CODES; dcode++) {
-	//      out_length += s.dyn_dtree[dcode*2]/*.Freq*/ * (5 + extra_dbits[dcode]);
-	//    }
-	//    out_length >>>= 3;
-	//    //Tracev((stderr,"\nlast_lit %u, in %ld, out ~%ld(%ld%%) ",
-	//    //       s->last_lit, in_length, out_length,
-	//    //       100L - out_length*100L/in_length));
-	//    if (s.matches < (s.last_lit>>1)/*int /2*/ && out_length < (in_length>>1)/*int /2*/) {
-	//      return true;
-	//    }
-	//  }
-	//#endif
+	
 
 	  return (s.last_lit === s.lit_bufsize - 1);
-	  /* We avoid equality with lit_bufsize because of wraparound at 64K
-	   * on 16 bit machines and because stored blocks are restricted to
-	   * 64K-1 bytes.
-	   */
+	 
 	}
 
 	exports._tr_init  = _tr_init;
@@ -69047,10 +69020,7 @@
 
 	'use strict';
 
-	// Note: adler32 takes 12% for level 0 and 2% for level 6.
-	// It doesn't worth to make additional optimizationa as in original.
-	// Small size is preferable.
-
+	
 	function adler32(adler, buf, len, pos) {
 	  var s1 = (adler & 0xffff) |0,
 	      s2 = ((adler >>> 16) & 0xffff) |0,
@@ -69085,12 +69055,6 @@
 
 	'use strict';
 
-	// Note: we can't get significant speed boost here.
-	// So write code to minimize size - no pregenerated tables
-	// and array tools dependencies.
-
-
-	// Use ordinary array, since untyped makes no boost here
 	function makeTable() {
 	  var c, table = [];
 
@@ -69143,23 +69107,14 @@
 	var LENS = 1;
 	var DISTS = 2;
 
-	/* Public constants ==========================================================*/
-	/* ===========================================================================*/
+	
 
-
-	/* Allowed flush values; see deflate() and inflate() below for details */
-	//var Z_NO_FLUSH      = 0;
-	//var Z_PARTIAL_FLUSH = 1;
-	//var Z_SYNC_FLUSH    = 2;
-	//var Z_FULL_FLUSH    = 3;
 	var Z_FINISH        = 4;
 	var Z_BLOCK         = 5;
 	var Z_TREES         = 6;
 
 
-	/* Return codes for the compression/decompression functions. Negative values
-	 * are errors, positive values are used for special but normal events.
-	 */
+	
 	var Z_OK            = 0;
 	var Z_STREAM_END    = 1;
 	var Z_NEED_DICT     = 2;
@@ -69174,8 +69129,6 @@
 	var Z_DEFLATED  = 8;
 
 
-	/* STATES ====================================================================*/
-	/* ===========================================================================*/
 
 
 	var    HEAD = 1;       /* i: waiting for magic header */
@@ -73790,7 +73743,7 @@
 			$scope.shells = {};
 
 			$scope.haveNonDeadShells = function(){
-				console.log($filter('notDead')($scope.shells));
+				// console.log($filter('notDead')($scope.shells));
 
 				return Object.keys($filter('notDead')($scope.shells)).length != 0;
 			}
@@ -73824,7 +73777,8 @@
 					$scope.shells[message.id] = {
 						ip: message.ip,
 						dead: message.dead,
-						flag:message.flag
+						flag:message.flag,
+						appear:message.appear
 					};
 
 					var newConnection = $websocket(window.location.href.replace("http", "ws")+"server/"+message.id);
@@ -73869,7 +73823,7 @@
 				var output = {};
 
 				Object.keys(items).forEach(function(key){
-					if(items[key].dead != false){
+					if(items[key].dead != false && items[key].appear === true){
 						output[key] = items[key];
 					}
 				});
@@ -73881,4 +73835,4 @@
 
 
 /***/ }
-/******/ ]);
+ ]);
