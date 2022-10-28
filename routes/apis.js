@@ -10,11 +10,7 @@ module.exports = function (app) {
     const { exec} = require('child_process');
     const randomstring = require("randomstring");
 
-    router.use(session({
-        secret: process.env.session,
-        saveUninitialized: false,
-        resave: false
-    }));
+    
     router.use(bodyParser.urlencoded({
         extended: true
     }));
@@ -69,7 +65,6 @@ module.exports = function (app) {
     
     
     router.get('/get_users_by_session_id/:id',funs.check_login_user,async function (req, res) {
-        // let sessions =  await funs.get_total_sessions()
         let users = await funs.get_users_by_sesison_number(parseInt(req.params.id))
         res.send(`${users}`)
 

@@ -3,11 +3,7 @@ module.exports = function(app) {
 	var router = require('express').Router();
     var session = require('express-session')
     require('dotenv').config()
-    router.use(session({
-        secret: process.env.session,
-        saveUninitialized: false,
-        resave: false
-    }));
+    
     const config = require('../config')
     const funs = require('./funs');
 router.get('/',funs.check_login_user, async function (req, res) {
