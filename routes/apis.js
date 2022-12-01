@@ -104,13 +104,64 @@ module.exports = function (app) {
         const username = await funs.get_user_from_token(token)
         const session = parseInt(req.body.session_id.replace(/\%20/ig,"").replace(/\%C2/ig,"").replace(/\%A0/ig,""))
 
-        console.log(username)
         funs.add_note(username,req.body.note,session)
         res.send("done")
     })
+    router.get('/change_role',[funs.check_login_user,funs.check_admin],async function (req, res) {
+        
+        const token = req.cookies.session
+        const username = await funs.get_user_from_token(token)
+        const is_admin = await funs.is_admin(username)
+        let role = "user"
+        if(req.query.role == "admin"){
+            role = 'admin'
+        }
+        if(is_admin){
+            funs.change_user_role(req.query.username,role)
+            res.send("done")
+            return
+        }
+        res.send("Only admin")
+    })
+    router.get('/change_username',[funs.check_login_user,funs.check_admin],async function (req, res) {
+        
+        
+            console.log(req.query.username)
+            console.log(req.query.new_username)
+            funs.change_username(req.query.username,req.query.new_username)
+            res.send("done")
+    })
+    router.get('/delete_user',[funs.check_login_user,funs.check_admin],async function (req, res) {
+        
+       
+            funs.delete_user(req.query.username,req.query.id)
+            res.send("done")
+            return
+    })
+    router.get('/add_session',[funs.check_login_user,funs.check_admin],async function (req, res) {
+        
+        funs.add_session(req.query.username,req.query.id)
+        res.send("done")
+        return
+})
+router.get('/delete_session',[funs.check_login_user,funs.check_admin],async function (req, res) {
+        
+    funs.delete_session(req.query.username,req.query.id)
+    res.send("done")
+    return
+})
+    router.post('/add_user',[funs.check_login_user,funs.check_admin],async function (req, res) {
+        
+        
+            let result = await funs.add_user(req.body.username,req.body.password)
+            if(result == "user already exists"){
+                res.send(result)
+                return
+            }
+    })
     router.get('/get_notes_by_id',async function (req, res) {
         const session = parseInt(req.query.session_id)
-        const data = await funs.get_notes_by_id("0")
+        const data = await funs.get_notes_by_id(session)
 
          res.send(data)
 

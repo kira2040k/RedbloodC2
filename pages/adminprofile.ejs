@@ -57,7 +57,11 @@
                                          </div>
 
                                 </div>
-                                
+                                <button class="button-34" role="button" onclick="open_button('list_users_div')">
+                                    list users</button>
+                                <button class="button-34" role="button" onclick="open_button('add_user_div')">
+                                    Add user</button>
+                                    
                                 <button class="button-34" role="button" onclick="open_button('change_password_form')">change
                                     password</button>
                                 <button class="button-34" role="button" onclick="open_button('auto_command_div')" title="handle modules">custom module
@@ -70,8 +74,75 @@
                                         powershell</button>
                                         <button class="button-34" role="button" onclick="open_button('macro_div')" title="generate powershell reverse shell">
                                             macro</button>
+                                        
                             </div>
                             <div class="col-sm-8">
+                                <div id="list_users_div" style="display:none" method="post">
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>username</th>
+                                            <th>role</th>
+                                            <th>sessions</th>
+
+                                            <th>actions</th>
+
+                                        </tr>
+                                        <% for(var i=0; i < list_users.length; i++) { %>
+                                        <tr>
+                                            <td><%= list_users[i].username %></td>
+                                            <td><%= list_users[i].role %></td>
+                                            <% if(list_users[i].role == 'admin'){ %>
+                                                <td>all</td>
+
+                                                <% }else{ %>
+
+                                            <td>
+                                                <% if(list_users[i].sessions.length == 0){ %>
+                                                    no sessions
+                                                    <% } %>
+                                                    <% for(var c=0; c < list_users[i].sessions.length; c++) {  %>
+                                                <%=list_users[i].sessions[c]  %>,
+                                                <% } %>
+                                            </td>
+                                            <% } %>
+
+                                            <td><button class="button-62" role="button"
+                                                onclick="delete_user('<%= list_users[i].username %>')">delete user</button>
+                                                <% if(list_users[i].role == 'admin'){ %>
+                                                <button class="button-62" role="button"
+                                                onclick="change_role('<%= list_users[i].username %>','user')">change role to user</button>
+                                                <% }else{ %>
+                                                    <button class="button-62" role="button"
+                                                    onclick="change_role('<%= list_users[i].username %>','admin')">change role to admin</button>
+    
+
+                                                    <% } %>
+                                                    <button class="button-62" role="button" onclick="change_username('<%= list_users[i].username %>')">change
+                                                        username</button>
+                                                        <button class="button-62" role="button" onclick="add_session('<%= list_users[i].username %>')">add session</button>
+                                                        <button class="button-62" role="button" onclick="delete_session('<%= list_users[i].username %>')">delete session</button>
+
+                                                    </td>
+                                        </tr>
+                                        <% } %>
+                                    </table>
+                                </div>
+                                <div id="macro_div" style="display:none" method="post">
+                                    <br>
+                                    <div class="success-msg" id="change_password_status" style="display:none">
+                                        <i id="change_password_message"></i>
+
+                                      
+                                </div>
+                                <input class="input-change-password" type=text id=macro_url placeholder="url of executable">
+                                <button class="button-62" role="button" onclick="macro_button()">Submit</button>
+                                <br>
+                                    <br>
+                                    <br>
+                                    <textarea id="marco_textarea"  >
+                                        </textarea>
+                                    </div>
                                 <div id="change_password_form" style="display:none" method="post">
                                     <br>
                                     <div class="success-msg" id="change_password_status" style="display:none">
@@ -85,19 +156,18 @@
                                     <button class="button-62" role="button"
                                         onclick="change_password_send()">Submit</button>
                                 </div>
-                                <div id="macro_div" style="display:none" method="post">
+                                <div id="add_user_div" style="display:none" method="post">
                                     <br>
-                                    <div class="success-msg" id="change_password_status" style="display:none">
-                                        <i id="change_password_message"></i>
+                                    <div class="success-msg" id="add_user_div_status" style="display:none;color:white">
+                                        <i id="add_user_message"></i>
+
                                     </div>
-                                        <input class="input-change-password" type=text id=macro_url placeholder="url of executable">
-                                        <button class="button-62" role="button" onclick="macro_button()">Submit</button>
-                                        <br>
-                                    <br>
-                                    <br>
-                                    <textarea id="marco_textarea"  >
-                                        </textarea>
-                                    
+                                    <input class="input-change-password" type=text id=add_user_username
+                                        placeholder="username">
+                                    <input class="input-change-password" type=text id=add_user_passowrd
+                                        placeholder="password"><br><br>
+                                    <button class="button-62" role="button"
+                                        onclick="add_user_send()">Submit</button>
                                 </div>
                                 <div id="auto_command_div" style="display:none" method="post">
                                     <br>
@@ -112,7 +182,7 @@
                                         <br>
                                         <br>
 
-                                    <div class="success-msg" id="auto_command_status" style="display:none">
+                                    <div class="success-msg" id="auto_command_status" style="display:none;color: white">
                                         <i id="auto_command_message"></i>
 
                                     </div>
@@ -123,7 +193,6 @@
                                         placeholder="description...">
                                         <br> <br> <br>
                                         <textarea id="auto_command_command" class="form-control" placeholder="command.."></textarea>
-
                                     <button class="button-62" role="button"
                                         onclick="auto_command_send()">Submit</button>
 
@@ -156,7 +225,7 @@
                                 </div>
                                 <div id="open_autoit_div" style="display:none" method="post">
                                     <br>
-                                    <div class="success-msg" id="change_password_status" style="display:none">
+                                    <div class="success-msg" id="change_password_status" style="display:none;color:white">
                                         <i id="change_password_message"></i>
 
                                     </div>
@@ -183,7 +252,7 @@
                                     <br>
                                     <br>
                                     <br>
-                                    <div class="success-msg" id="on_connection_command_status" style="display:none">
+                                    <div class="success-msg" id="on_connection_command_status" style="display:none;color:white;">
                                         <i id="on_connection_command_message"></i>
 
                                     </div>
@@ -239,7 +308,7 @@
 
                                     <input class="input-change-password" type=text id=powershell_ip
                                         placeholder="Host..">
-                                     <input class="input-change-password" type=text id=time_sleep
+                                        <input class="input-change-password" type=text id=time_sleep
                                         placeholder="Sleep time" title="sleep time between requests"><br><br>
                                     <button class="button-62" role="button"
                                         onclick="generate_powershell()">generate</button>

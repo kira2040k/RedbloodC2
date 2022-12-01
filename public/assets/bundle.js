@@ -587,7 +587,7 @@
 
 
 	// module
-	exports.push([module.id, "/*!\n *       __ _____                     ________                              __\n *      / // _  /__ __ _____ ___ __ _/__  ___/__ ___ ______ __ __  __ ___  / /\n *  __ / // // // // // _  // _// // / / // _  // _//     // //  \\/ // _ \\/ /\n * /  / // // // // // ___// / / // / / // ___// / / / / // // /\\  // // / /__\n * \\___//____ \\\\___//____//_/ _\\_  / /_//____//_/ /_/ /_//_//_/ /_/ \\__\\_\\___/\n *           \\/              /____/                              version 0.11.23\n * http://terminal.jcubic.pl\n *\n * This file is part of jQuery Terminal.\n *\n * Copyright (c) 2011-2016 Jakub Jankiewicz <http://jcubic.pl>\n * Released under the MIT license\n *\n * Date: Sat, 10 Dec 2016 10:47:30 +0000\n */\n.terminal .terminal-output .format, .cmd .format,\n.cmd .prompt, .cmd .prompt div, .terminal .terminal-output div div{\n    display: inline-block;\n}\n.terminal h1, .terminal h2, .terminal h3, .terminal h4, .terminal h5, .terminal h6, .terminal pre, .cmd {\n    margin: 0;\n}\n.terminal h1, .terminal h2, .terminal h3, .terminal h4, .terminal h5, .terminal h6 {\n    line-height: 1.2em;\n}\n/*\n.cmd .mask {\n    width: 10px;\n    height: 11px;\n    background: black;\n    z-index: 100;\n}\n*/\n.cmd .clipboard {\n    position: absolute;\n    left: -16px;\n    top: 0;\n    width: 10px;\n    height: 16px;\n    /* this seems to work after all on Android */\n    /*left: -99999px;\n    clip: rect(1px,1px,1px,1px);\n    /* on desktop textarea appear when paste */\n    /*\n    opacity: 0.01;\n    filter: alpha(opacity = 0.01);\n    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0.01);\n    */\n    background: transparent;\n    border: none;\n    color: transparent;\n    outline: none;\n    padding: 0;\n    resize: none;\n    z-index: 0;\n    overflow: hidden;\n}\n.terminal .error {\n    color: #f00;\n}\n.terminal {\n    padding: 10px;\n    position: relative;\n    /*overflow: hidden;*/\n    overflow: auto;\n}\n.cmd {\n    padding: 0;\n    height: 1.3em;\n    position: relative;\n    /*margin-top: 3px; */\n}\n.terminal .inverted, .cmd .inverted, .cmd .cursor.blink {\n    background-color: #aaa;\n    color: #000;\n}\n.cmd .cursor.blink {\n    -webkit-animation: terminal-blink 1s infinite steps(1, start);\n       -moz-animation: terminal-blink 1s infinite steps(1, start);\n        -ms-animation: terminal-blink 1s infinite steps(1, start);\n            animation: terminal-blink 1s infinite steps(1, start);\n}\n@-webkit-keyframes terminal-blink {\n  0%, 100% {\n      background-color: #000;\n      color: #aaa;\n  }\n  50% {\n      background-color: #bbb;\n      color: #000;\n  }\n}\n\n@-ms-keyframes terminal-blink {\n  0%, 100% {\n      background-color: #000;\n      color: #aaa;\n  }\n  50% {\n      background-color: #bbb;\n      color: #000;\n  }\n}\n\n@-moz-keyframes terminal-blink {\n  0%, 100% {\n      background-color: #000;\n      color: #aaa;\n  }\n  50% {\n      background-color: #bbb;\n      color: #000;\n  }\n}\n@keyframes terminal-blink {\n  0%, 100% {\n      background-color: #000;\n      color: #aaa;\n  }\n  50% {\n      background-color: #bbb; /* not #aaa because it's seems there is Google Chrome bug */\n      color: #000;\n  }\n}\n\n.terminal .terminal-output div div, .cmd .prompt {\n    display: block;\n    line-height: 14px;\n    height: auto;\n}\n.cmd .prompt {\n    float: left;\n}\n.terminal, .cmd {\n    font-family: monospace;\n    /*font-family: FreeMono, monospace; this don't work on Android */\n    color: #aaa;\n    background-color: #000;\n    font-size: 12px;\n    line-height: 14px;\n}\n.terminal-output > div {\n    /*padding-top: 3px;*/\n    min-height: 14px;\n}\n.terminal-output > div > div * {\n    word-wrap: break-word; /* when echo html */\n}\n.terminal .terminal-output div span {\n    display: inline-block;\n}\n.cmd span {\n    float: left;\n    /*display: inline-block; */\n}\n/* fix double style of selecting text in terminal */\n.terminal-output span, .terminal-output a, .cmd div, .cmd span, .terminal td,\n.terminal pre, .terminal h1, .terminal h2, .terminal h3, .terminal h4,\n.terminal h5, .terminal h6 {\n    -webkit-touch-callout: initial;\n    -webkit-user-select: initial;\n    -khtml-user-select: initial;\n    -moz-user-select: initial;\n    -ms-user-select: initial;\n    user-select: initial;\n}\n.terminal, .terminal-output, .terminal-output div {\n    -webkit-touch-callout: none;\n    -webkit-user-select: none;\n    -khtml-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n}\n/* firefox hack */\n@-moz-document url-prefix() {\n    .terminal, .terminal-output, .terminal-output div {\n        -webkit-touch-callout: initial;\n        -webkit-user-select: initial;\n        -khtml-user-select: initial;\n        -moz-user-select: initial;\n        -ms-user-select: initial;\n        user-select: initial;\n    }\n}\n.terminal table {\n    border-collapse: collapse;\n}\n.terminal td {\n    border: 1px solid #aaa;\n}\n.terminal h1::-moz-selection,\n.terminal h2::-moz-selection,\n.terminal h3::-moz-selection,\n.terminal h4::-moz-selection,\n.terminal h5::-moz-selection,\n.terminal h6::-moz-selection,\n.terminal pre::-moz-selection,\n.terminal td::-moz-selection,\n.terminal .terminal-output div div::-moz-selection,\n.terminal .terminal-output div span::-moz-selection,\n.terminal .terminal-output div div a::-moz-selection,\n.cmd div::-moz-selection,\n.cmd > span::-moz-selection,\n.cmd .prompt span::-moz-selection {\n    background-color: #aaa;\n    color: #000;\n}\n/* this don't work in Chrome\n.terminal tr td::-moz-selection {\n    border-color: #000;\n}\n.terminal tr td::selection {\n    border-color: #000;\n}\n*/\n.terminal h1::selection,\n.terminal h2::selection,\n.terminal h3::selection,\n.terminal h4::selection,\n.terminal h5::selection,\n.terminal h6::selection,\n.terminal pre::selection,\n.terminal td::selection,\n.terminal .terminal-output div div::selection,\n.terminal .terminal-output div div a::selection,\n.terminal .terminal-output div span::selection,\n.cmd div::selection,\n.cmd > span::selection,\n.cmd .prompt span::selection {\n    background-color: #aaa;\n    color: #000;\n}\n.terminal .terminal-output div.error, .terminal .terminal-output div.error div {\n    color: red;\n}\n.tilda {\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    z-index: 1100;\n}\n.clear {\n    clear: both;\n}\n.terminal a {\n    color: #0F60FF;\n}\n.terminal a:hover {\n    color: red;\n}\n", ""]);
+	exports.push([module.id, "/*!\n *       __ _____                     ________                              __\n *      / // _  /__ __ _____ ___ __ _/__  ___/__ ___ ______ __ __  __ ___  / /\n *  __ / // // // // // _  // _// // / / // _  // _//     // //  \\/ // _ \\/ /\n * /  / // // // // // ___// / / // / / // ___// / / / / // // /\\  // // / /__\n * \\___//____ \\\\___//____//_/ _\\_  / /_//____//_/ /_/ /_//_//_/ /_/ \\__\\_\\___/\n *           \\/              /____/                              version 0.11.23\n * http://terminal.jcubic.pl\n *\n * This file is part of jQuery Terminal.\n *\n * Copyright (c) 2011-2016 Jakub Jankiewicz <http://jcubic.pl>\n * Released under the MIT license\n *\n * Date: Sat, 10 Dec 2016 10:47:30 +0000\n */\n.terminal .terminal-output .format, .cmd .format,\n.cmd .prompt, .cmd .prompt div, .terminal .terminal-output div div{\n    display: inline-block;\n}\n.terminal h1, .terminal h2, .terminal h3, .terminal h4, .terminal h5, .terminal h6, .terminal pre, .cmd {\n    margin: 0;\n}\n.terminal h1, .terminal h2, .terminal h3, .terminal h4, .terminal h5, .terminal h6 {\n    line-height: 1.2em;\n}\n/*\n.cmd .mask {\n    width: 10px;\n    height: 11px;\n    background: black;\n    z-index: 100;\n}\n*/\n.cmd .clipboard {\n    position: absolute;\n    left: -16px;\n    top: 0;\n    width: 10px;\n    height: 16px;\n    /* this seems to work after all on Android */\n    /*left: -99999px;\n    clip: rect(1px,1px,1px,1px);\n    /* on desktop textarea appear when paste */\n    /*\n    opacity: 0.01;\n    filter: alpha(opacity = 0.01);\n    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0.01);\n    */\n    background: transparent;\n    border: none;\n    color: transparent;\n    outline: none;\n    padding: 0;\n    resize: none;\n    z-index: 0;\n    overflow: hidden;\n}\n.terminal .error {\n    color: #f00;\n}\n.terminal {\n    padding: 10px;\n    position: relative;\n    /*overflow: hidden;*/\n    overflow: auto;\n}\n.cmd {\n    padding: 0;\n    height: 1.3em;\n    position: relative;\n    /*margin-top: 3px; */\n}\n.terminal .inverted, .cmd .inverted, .cmd .cursor.blink {\n    background-color: #aaa;\n    color: #000;\n}\n.cmd .cursor.blink {\n    -webkit-animation: terminal-blink 1s infinite steps(1, start);\n       -moz-animation: terminal-blink 1s infinite steps(1, start);\n        -ms-animation: terminal-blink 1s infinite steps(1, start);\n            animation: terminal-blink 1s infinite steps(1, start);\n}\n@-webkit-keyframes terminal-blink {\n  0%, 100% {\n      background-color: #000;\n      color: #aaa;\n  }\n  50% {\n      background-color: #bbb;\n      color: #000;\n  }\n}\n\n@-ms-keyframes terminal-blink {\n  0%, 100% {\n      background-color: #000;\n      color: #aaa;\n  }\n  50% {\n      background-color: #bbb;\n      color: #000;\n  }\n}\n\n@-moz-keyframes terminal-blink {\n  0%, 100% {\n      background-color: #000;\n      color: #aaa;\n  }\n  50% {\n      background-color: #bbb;\n      color: #000;\n  }\n}\n@keyframes terminal-blink {\n  0%, 100% {\n      background-color: #000;\n      color: #aaa;\n  }\n  50% {\n      background-color: #bbb; /* not #aaa because it's seems there is Google Chrome bug */\n      color: #000;\n  }\n}\n\n.terminal .terminal-output div div, .cmd .prompt {\n    display: block;\n    line-height: 14px;\n    height: auto;\n}\n.cmd .prompt {\n    float: left;\n}\n.terminal, .cmd {\n    font-family: monospace;\n    /*font-family: FreeMono, monospace; this don't work on Android */\n    color: #aaa;\n    background-color: #000;\n    font-size: 12px;\n    line-height: 14px;\n}\n.terminal-output > div {\n    /*padding-top: 3px;*/\n    min-height: 14px;\n}\n.terminal-output > div > div * {\n    word-wrap: break-word; /* when echo html */\n}\n.terminal .terminal-output div span {\n    display: inline-block;\n}\n.cmd span {\n    float: left;\n    /*display: inline-block; */\n}\n/* fix double style of selecting text in terminal */\n.terminal-output span, .terminal-output a, .cmd div, .cmd span, .terminal td,\n.terminal pre, .terminal h1, .terminal h2, .terminal h3, .terminal h4,\n.terminal h5, .terminal h6 {\n    -webkit-touch-callout: initial;\n    -webkit-user-select: initial;\n    -khtml-user-select: initial;\n    -moz-user-select: initial;\n    -ms-user-select: initial;\n    user-select: initial;\n}\n.terminal, .terminal-output, .terminal-output div {\n    -webkit-touch-callout: none;\n    -webkit-user-select: auto;\n    -khtml-user-select: auto;\n    -moz-user-select: auto;\n    -ms-user-select: auto;\n    user-select: auto;\n}\n/* firefox hack */\n@-moz-document url-prefix() {\n    .terminal, .terminal-output, .terminal-output div {\n        -webkit-touch-callout: initial;\n        -webkit-user-select: initial;\n        -khtml-user-select: initial;\n        -moz-user-select: initial;\n        -ms-user-select: initial;\n        user-select: initial;\n    }\n}\n.terminal table {\n    border-collapse: collapse;\n}\n.terminal td {\n    border: 1px solid #aaa;\n}\n.terminal h1::-moz-selection,\n.terminal h2::-moz-selection,\n.terminal h3::-moz-selection,\n.terminal h4::-moz-selection,\n.terminal h5::-moz-selection,\n.terminal h6::-moz-selection,\n.terminal pre::-moz-selection,\n.terminal td::-moz-selection,\n.terminal .terminal-output div div::-moz-selection,\n.terminal .terminal-output div span::-moz-selection,\n.terminal .terminal-output div div a::-moz-selection,\n.cmd div::-moz-selection,\n.cmd > span::-moz-selection,\n.cmd .prompt span::-moz-selection {\n    background-color: #aaa;\n    color: #000;\n}\n/* this don't work in Chrome\n.terminal tr td::-moz-selection {\n    border-color: #000;\n}\n.terminal tr td::selection {\n    border-color: #000;\n}\n*/\n.terminal h1::selection,\n.terminal h2::selection,\n.terminal h3::selection,\n.terminal h4::selection,\n.terminal h5::selection,\n.terminal h6::selection,\n.terminal pre::selection,\n.terminal td::selection,\n.terminal .terminal-output div div::selection,\n.terminal .terminal-output div div a::selection,\n.terminal .terminal-output div span::selection,\n.cmd div::selection,\n.cmd > span::selection,\n.cmd .prompt span::selection {\n    background-color: #aaa;\n    color: #000;\n}\n.terminal .terminal-output div.error, .terminal .terminal-output div.error div {\n    color: red;\n}\n.tilda {\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    z-index: 1100;\n}\n.clear {\n    clear: both;\n}\n.terminal a {\n    color: #0F60FF;\n}\n.terminal a:hover {\n    color: red;\n}\n", ""]);
 
 	// exports
 
@@ -20904,7 +20904,6 @@
 	 * transclusionScope.$destroy();
 	 * ```
 	 *
-	 * <div class="alert alert-info">
 	 * **Best Practice**: if you intend to add and remove transcluded content manually in your directive
 	 * (by calling the transclude function to get the DOM and calling `element.remove()` to remove it),
 	 * then you are also responsible for calling `$destroy` on the transclusion scope.
@@ -31982,7 +31981,6 @@
 	   *    Follow {@link ng.$sce#resourceUrlPatternItem this link} for a description of the items
 	   *    allowed in this array.
 	   *
-	   *    <div class="alert alert-warning">
 	   *    **Note:** an empty whitelist array will block all URLs!
 	   *    </div>
 	   *
@@ -37921,7 +37919,6 @@
 	      var key = event.keyCode;
 
 	      // ignore
-	      //    command            modifiers                   arrows
 	      if (key === 91 || (15 < key && key < 19) || (37 <= key && key <= 40)) return;
 
 	      deferListener(event, this, this.value);
@@ -46582,7 +46579,6 @@
 	 *
 	 * Debug interpreters names in LocalStorage
 	 * onPositionChange event add to terminal ???
-	 * different command line history for each login users (add login if present to
 	 * localStorage key)
 	 *
 	 * TEST: login + promises/exec
@@ -47423,14 +47419,15 @@
 	            return maybe_data;
 	        }
 	        self.addClass('cmd');
-	        self.append('<span class="prompt"></span><span id="sssss"></span>' +
-	                    '<span class="cursor">&nbsp;</span><span></span>');
+	        self.append('<span class="prompt"></span><span class="list_commands" id="list_commands"></span>' +
+	                    '<span class="cursor">&nbsp;</span><span id="RECS"></span>' +'<br><ul style="position:relative; left:-4%;list-style-type: none;" class="results" id="results"></ul>');
 	        // on mobile the only way to hide textarea on desktop it's needed because
 	        // textarea show up after focus
 	        //self.append('<span class="mask"></mask>');
 	        var clip = $('<textarea>').attr({
 	            autocapitalize: 'off',
-	            spellcheck: 'false'
+	            spellcheck: 'false',
+				autocomplete:"on"
 	        }).addClass('clipboard').appendTo(self);
 	        // we don't need this but leave it as a comment just in case
 	        //var contentEditable = $('<div contentEditable></div>')
@@ -49360,6 +49357,7 @@
 	                                                      arity,
 	                                                      login);
 	                    }
+						//important
 	                    terminal.push(val, {
 	                        prompt: command.name + '> ',
 	                        name: command.name,
@@ -51584,7 +51582,6 @@
 	        });
 	        output = $('<div>').addClass('terminal-output').appendTo(self);
 	        self.addClass('terminal');
-	        // keep focus in clipboard textarea in mobile
 	        /*
 	          if (('ontouchstart' in window) || window.DocumentTouch &&
 	          document instanceof DocumentTouch) {
@@ -73770,7 +73767,10 @@
 			});
 
 			connection = $websocket(window.location.href.replace("http", "ws")+"servers");
-
+			async function upload(file){
+				if(file != "!upload" && file != "!upload " ) return;
+					document.getElementById('upload_file_id').click();					
+			}
 			connection.onMessage(function(message) {
 				message = JSON.parse(message.data);
 				if(message.message == "newServer"){
@@ -73778,24 +73778,109 @@
 						ip: message.ip,
 						dead: message.dead,
 						flag:message.flag,
-						appear:message.appear
+						appear:message.appear,
+						os:message.os
 					};
-
+					//tcp
+					if(message.type == "socket"){
+						
 					var newConnection = $websocket(window.location.href.replace("http", "ws")+"server/"+message.id);
-
 					var id = message.id;
-
 					newConnection.onMessage(function(message){
 						message = JSON.parse(message.data);
 						$rootScope.$emit('terminal.main-'+id+'.echo', message.data.trim());
 					});
-
 					$rootScope.$on('terminal.main-'+id, function (e, input, terminal) {
+						upload(input)
 						newConnection.send(JSON.stringify({
 							message: "command", 
 							command: input+"\n"
 						}));
+					
 					});
+				}
+				if(message.type == "http"){
+					var id = message.id;
+
+					$rootScope.$on('terminal.main-'+id, function (e, input, terminal) {
+						upload(input)
+						
+						fetch('/apis/http_command/', {
+    					method: 'POST',
+    					headers: {
+    					  'Accept': 'application/json',
+    					  'Content-Type': 'application/json'
+    					},
+    					body: JSON.stringify({command: input, id: message.id})})
+						
+	
+				});
+				function load_history(){
+					fetch('http://localhost/apis/http_history?id='+message.id).then(data=>{
+						data.text().then(text=>{
+							if(text == "none💥💢💘"){
+								return
+							}
+							if(text.includes("47d0d2a3-5297-4f3d-ab84-cc68d8ea5a8d") && text.includes("56459d41-085b-483c-84ab-316a7c163e86")){
+								window.location.replace("/login")
+							}
+							text = JSON.parse(text)
+							for(i=0;i<text.length;i++){
+								if(text[i].command != undefined){
+									$rootScope.$emit('terminal.main-'+id+'.echo', ">"+text[i].command);
+								}
+								if(text[i].response != undefined){
+									$rootScope.$emit('terminal.main-'+id+'.echo',text[i].response);
+
+
+								}
+
+							}
+
+						})	
+
+						})
+				}
+				load_history()
+				async function update(){
+					let response = await fetch('http://localhost/apis/http_command_response?id='+message.id)					
+					let is_download_able = response.headers.get("download")
+					if(is_download_able){
+						let blob = await response.blob()
+						const url = window.URL.createObjectURL(blob);
+						const a = document.createElement("a");
+        				a.style.display = "none";
+        				a.href = url;
+        				a.download = "file";
+						a.click();
+        window.URL.revokeObjectURL(url);
+						return
+
+					}
+					else{
+						response.text().then(text=>{
+							if(text == "none💥💢💘"){
+								return
+							}
+							if(text.includes("47d0d2a3-5297-4f3d-ab84-cc68d8ea5a8d") && text.includes("56459d41-085b-483c-84ab-316a7c163e86")){
+								window.location.replace("/login")
+							}
+							$rootScope.$emit('terminal.main-'+id+'.echo', text);
+
+
+						})	
+					}
+					
+
+						
+				
+					
+					}
+					if(message.dead == false) setInterval(update,2000);
+
+				}
+				
+
 				}
 			});
 			

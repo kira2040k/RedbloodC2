@@ -28,22 +28,50 @@ password: admin
 
 ```
 -------------------------
-|Feature |public|private|
-|-----|--------|--------|
-|FUD reverse shell (windows & linux) 🐞|❌       |✔️|
-|admin panel 🛑|❌      |✔️|
-|web UI  📱|✔️      |✔️|
-|FUD powershell payload 🐞|❌      |✔️|
-|FUD macro payload 🐞|❌      |✔️|
-|FUD other types of malware 🐞|❌      |✔️|
-|auto commands  🤖|✔️      |✔️|
-|encrypt communication 🔐|❌      |✔️|
-|block vpn and tor connections 🧅 |✔️      |✔️|
-|manage users and sessions 📃|❌      |✔️|
-|Sessions chart 📊 |❌      |✔️|
-|FUD autoit shell |✔️      |✔️|
-|on connections commands |✔️      |✔️|
-|notes & obfuscate path |✔️      |✔️|
+|Feature |present
+|-----|--------|
+|FUD windows reverse shell  🐞|✔️|
+|admin panel 🛑|✔️|
+|web UI  📱|✔️|
+|FUD powershell payload 🐞|✔️|
+|FUD macro 🐞|✔️|
+|FUD other types of malware 🐞|✔️|
+|auto commands  🤖|✔️|
+|encrypt communication 🔐|✔️|
+|block vpn and tor connections 🧅 |✔️|    
+|manage users and sessions 📃|✔️|     
+|Sessions chart 📊 |❌|
+|FUD autoit shell |✔️|
+|on connections commands |✔️|    
+|notes & obfuscate path |✔️|    
+|http/s reverse shell |✔️| 
+
+-------------------------
+
+## New features: 
+<ul>
+<li>http / https payloads </li>
+<li>FUD macro</li>
+<li>FUD http/https powershell</li>
+<li>manage sessions</li>
+<li>admin and users </li>
+<li>process list</li>
+<li>upload & download files</li> 
+<li>detect os</li>
+<li>add modules keywords</li>
+<ul>
+<li>kiraRandomstr: for generate random string</li>
+<li> kiraRandomint: generate random number</li>
+</ul>
+<li>add more modules</li>
+<ul>
+<li>browser modules</li>
+<li> data exfiltration modules</li>
+<li> windows persistence modules</li>
+</ul>
+<li>user can access limited sessions chosen by admin</li>
+</ul>
+
 ## notes:
 
 You can edit <a href="https://github.com/kira2040k/RedbloodC2/blob/main/config.js">config.js</a> to control over your C2.

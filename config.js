@@ -5,7 +5,8 @@ const settings = {
 	port:80,
 	token_expire:'1800s', // 30M
 	offline_shells:true,
-	listeners_ports:[443,1337],
+	listeners_ports:[443,1337], 
+	http_reverse_listeners:8080,
 	colors:{
 		shell_list_backgound_color:"black",
 		index_background:"#333333",

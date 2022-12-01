@@ -248,18 +248,6 @@ function add_command(title, des, command, callback) {
 
 
 
-function get_sessions_by_username(username, callback) {
-    db.all("SELECT * FROM sessions WHERE username = (?)", [username], (err, rows) => {
-        let rows_return = []
-        for (i = 0; i < rows.length; i++) {
-            rows_return.push(rows[i].session_number)
-        }
-        callback(rows_return)
-
-    });
-}
-
-
 
 async function get_users_by_sesison_number(session){
     return new Promise(resolve => {
@@ -355,6 +343,25 @@ class command_param{
         if(c1){
                 c1 = c1.replace("kiraC3_","").replace("_kiraC3","")
                 command = command.replace(/(kiraC3_.*_kiraC3)/,args[2].replace("\n",""))
+                if(args.length > 2){
+                    return this.params4(command,args)
+                }else{
+                    return command
+
+                }
+            }
+        }catch(e){
+            return command
+        }
+    }
+    params4(command,args){
+        
+        let c1 = /(kiraC4_.*_kiraC4)/.exec(command)[0]
+        try{
+ 
+        if(c1){
+                c1 = c1.replace("kiraC4_","").replace("_kiraC4","")
+                command = command.replace(/(kiraC4_.*_kiraC4)/,args[3].replace("\n",""))
                     return command
             }
         }catch(e){
@@ -362,11 +369,60 @@ class command_param{
         }
     }
 }
-function run_command(command){
-    return new Promise(resolve => {
+class randmon_str {
+    randmon (){
+        const length = Math.floor(Math.random() *  10) + 5
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
 
+    random_str =(str) => {
+        const list = ["kiraRandomstr1","kiraRandomstr2","kiraRandomstr3","kiraRandomstr4","kiraRandomstr5","kiraRandomstr6","kiraRandomstr7","kiraRandomstr8","kiraRandomstr9","kiraRandomstr10"]
+         for(var i=0;i<list.length;i++) {
+             str = str.replaceAll(list[i],this.randmon())
+         }
+         return str
+ 
+     } 
+ 
+ 
+}
+class randmonint {
+    randmon (){
+        const length = Math.floor(Math.random() *  10) + 5
+        var result           = '';
+        var characters       = '0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+
+random_int =(str) => {
+       const list = ["kiraRandomint1","kiraRandomint2","kiraRandomint3","kiraRandomint4","kiraRandomint5","kiraRandomint6","kiraRandomint7","kiraRandomint8","kiraRandomint9","kiraRandomint10"]
+        for(var i=0;i<list.length;i++) {
+            str = str.replaceAll(list[i],this.randmon())
+        }
+        return str
+
+    } 
+
+}
+async function run_command(command){
+    return new Promise(resolve => {
+    if(command == undefined) return;
     let  split_command = command.split(" ")
     let args = split_command.slice(2,10)
+    const handle_randmon_str = new randmon_str();
+    command = handle_randmon_str.random_str(command)
+    const handle_randmon_int = new randmonint();
+    command = handle_randmon_int.random_int(command)
     if(split_command[0] == "run"){
         get_command_by_title(split_command[1].replace(/\s/gi,""),data=>{
             if(data.length == 0) {
@@ -374,7 +430,8 @@ function run_command(command){
                 return
             }
             const handle_command = new command_param();
-            const res = handle_command.param1(data[0].command,args)
+            res = handle_command.param1(data[0].command,args)
+
             resolve(res)
         })
         
@@ -383,6 +440,15 @@ function run_command(command){
     }
 })
 }
+const  get_all_by_username= async (username) =>{
+    return new Promise(resolve => {
+
+    db.all("SELECT * FROM users WHERE username = (?)", [username], (err, rows) => {
+        resolve(rows)
+    });
+})
+}
+
 
 const get_user_from_token = (token)=>{
     return new Promise(resolve => {
@@ -394,6 +460,33 @@ const get_user_from_token = (token)=>{
         resolve(user.username)
       })
     })
+}
+
+const check_login_user_socket =  (req) =>{
+    return new Promise(resolve => {
+
+    const token = req.cookies.session
+    if (token == null) resolve(false)
+    jwt.verify(token, process.env.TOKEN_SECRET, (err,user)=> {
+      if (err){
+        resolve(false)
+      }else{
+        resolve(true)
+
+      }
+    })
+})
+
+}
+const check_admin = async (req,res,next) =>{
+        const token = req.cookies.session
+        const username = await get_user_from_token(token)
+        const is_admin_var = await is_admin(username)
+        if(is_admin_var){
+            next()
+            return
+        }
+        res.redirect("/login")
 }
 
 const check_login_user =  (req,res,next) =>{
@@ -409,7 +502,24 @@ const check_login_user =  (req,res,next) =>{
         })
 
 }
+const fake_headers =  (req,res,next) =>{
+    const status_codes = [200,201]
+    const number = parseInt(Math.random() *status_codes.length)
+    res.status(status_codes[number])
+    res.removeHeader("X-Powered-By")
+    next()
 
+   
+
+}
+const fake_content_len = ()=>{
+    const number = Math.random() * (900 - 50) + 900
+    let string = ""
+    for(i=0;i<number;i++){
+        string+= " "
+    }
+    return string
+}
 const get_all_on_connection_commands = ()=>{
     return new Promise(resolve => {
 
@@ -560,6 +670,8 @@ const gzip_compress = (compress_data)=>{
         
 }
 
+
+
 const unzip = (compress_data)=>{
     return new Promise(resolve => {
         zlib.unzip(compress_data, (err, buffer) => {
@@ -570,7 +682,209 @@ const unzip = (compress_data)=>{
     })
         }
 
+const check_same_id = (list_cookies,id)=>{
+    if(list_cookies.includes(id.toString())){
+        id++
+        return check_same_id(list_cookies,id)
+    }else{
+        return id
+    }
+}
+
+const find_random_value = (values)=>{
+    return values[Object.keys(values)[0]]
+}
+
+const is_admin = async(username)=>{
+    return new Promise(resolve => {
+        get_all_by_username(username).then(data=>{
+            try{
+            const role = data[0].role
+            if(role == "admin"){
+                resolve(true)
+            }else{
+                resolve(false)
+            }}
+            catch(e){resolve(false)}
+        }) 
+    })
+}
+
+async function add_user(username,password){
+    var hash = crypto.createHash('sha512');
+    password = hash.update(password, 'utf-8');
+    password = password.digest('hex');
+    const is_user_available = await get_all_by_username(username)
+    if(is_user_available.length > 0){
+        
+        return "user already exists"
+    }
+    return new Promise(resolve => {
+    db.run("INSERT INTO users (username,password,role) VALUES (?,?,'user')", [username,password], function (err) {
+        if (err) {
+            console.log(err)
+           resolve(false)
+        } else {
+            
+             resolve(true)
+        }
+    });
+})
+}
+const list_all_users = ()=>{
+    return new Promise(resolve => {
+    db.all("SELECT username,role FROM users", (err, rows) => {
+        if(err){
+            console.log(err)
+        }
+        if (rows.length > 0) {
+            resolve(rows)
+        } else {
+            resolve(false)
+        }
+    });
+})
+}
+const delete_user = (username)=>{
+    return new Promise(resolve => {
+        db.run("DELETE FROM users WHERE username=(?)",[username],function (err) {
+            if (err) {
+                console.log(err)
+               resolve(false)
+            } else {
+                
+                 resolve(true)
+            }
+        })
+    })
+
+}
+
+function change_user_role(username,role) {
+    return new Promise(resolve => {
+    db.run("UPDATE users SET  role = (?) WHERE username = (?)", [role, username], function (err) {
+        if (err) {
+            console.log(err)
+        } else {
+            resolve(true)
+        }
+    });
+})
+
+}
+function change_username(username,new_username) {
+    console.log(username)
+    console.log(new_username)
+    return new Promise(resolve => {
+    db.run("UPDATE users SET  username = (?) WHERE username = (?)", [new_username, username], function (err) {
+        if (err) {
+            console.log(err)
+        } else {
+            resolve(true)
+        }
+    });
+})
+
+}
+
+const get_sessions_by_username = async (username)=>{
+    return new Promise(resolve => {
+        let list = []
+        db.all("SELECT * FROM sessions WHERE username = (?)",[username], (err, rows) => {
+            if(err){
+                console.log(err)
+            }
+            if (rows.length > 0) {
+                for(i=0;i<rows.length;i++){
+                    list.push(rows[i].session_number)
+                }
+                resolve(list)
+            } else {
+                resolve(list)
+            }
+            
+        });
+    })
+
+}
+const add_session = async (username,session_id)=>{
+    return new Promise(resolve => {
+
+    db.run("INSERT INTO sessions (username,session_number) VALUES (?,?)", [username,session_id], function (err) {
+        if (err) {
+            console.log(err)
+           resolve(false)
+        } else {
+            
+             resolve(true)
+        }
+    });
+})
+}
+const delete_session = async (username,session_id)=>{
+    return new Promise(resolve => {
+
+    db.run("DELETE FROM sessions WHERE username=(?) AND session_number=(?)", [username,session_id], function (err) {
+        if (err) {
+            console.log(err)
+           resolve(false)
+        } else {
+            
+             resolve(true)
+        }
+    });
+})
+}
+const http_sessions_check_access_body = async (req,res,next) =>{
+    const token = req.cookies.session
+    const username = await get_user_from_token(token)
+    const data = await get_all_by_username(username)
+
+    let sessions = await get_sessions_by_username(username)			
+			if(data[0].role == "admin"){
+				sessions = "all"
+			}
+            if(sessions == "all" || sessions.includes(parseInt(req.body.id))){
+            next()
+            }
+            else{
+                res.send("Error")
+
+            }
+}
+const http_sessions_check_access_query = async (req,res,next) =>{
+    const token = req.cookies.session
+    const username = await get_user_from_token(token)
+    const data = await get_all_by_username(username)
+
+    let sessions = await get_sessions_by_username(username)			
+			if(data[0].role == "admin"){
+				sessions = "all"
+			}
+            if(sessions == "all" || sessions.includes(parseInt(req.query.id))){
+            next()
+            }
+            else{
+                res.send("none💥💢💘")
+
+            }
+}
+
 module.exports = {
+    http_sessions_check_access_query,
+    http_sessions_check_access_body,
+    delete_session,
+    add_session,
+    get_sessions_by_username,
+    change_username,
+    change_user_role,
+    delete_user,
+    list_all_users,
+    is_admin,
+    fake_content_len,
+    fake_headers,
+    find_random_value,
+    check_same_id,
     AES_encrypt,
     AES_decrypt,
     run_command,
@@ -580,7 +894,6 @@ module.exports = {
     get_all_commands_db,
     get_command_by_title,
     add_command,
-    get_sessions_by_username,
     change_user_password_db,
     get_total_session_by_username,
     all_data,
@@ -606,5 +919,8 @@ module.exports = {
     add_note,
     delete_all_note,
     get_notes_by_id,
-    
+    check_login_user_socket,
+    get_all_by_username,
+    add_user,
+    check_admin
 }

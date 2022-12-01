@@ -65,7 +65,7 @@
 					<li class="header"><a>Shell list</a></li>
 					<li ng-class="{active: currentShellId == key}" ng-repeat="(key, shell) in shells | notDead"><a
 							ng-click="selectShell(key)">{{shell.ip}} #{{key}}
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src={{shell.os}} alt="" height="22" width="22"></a></li>
 					<li ng-show="!haveNonDeadShells()"><a>No shells</a></li>
 					<% if (settings.offline_shells) { %>
 
@@ -90,11 +90,19 @@
 					<button onclick="run_command()" title="select any module and click on the bug after that command will execute"
 						style="float: left;width: 20%;padding: 10px;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;"
 						type="submit"><img src="https://cdn-icons-png.flaticon.com/24/78/78946.png"></button>
+						
+					</form> 
 
 				</div>
+				<form style="display:none" id="the_form" style="float:right;" action="/apis/http_upload_file" method="POST" enctype="multipart/form-data">
+					<input id='upload_file_id' onchange="send_file()" name="uploaded_file" value="upload_file_id" type='file' style="display:''"/>
+					<input type='submit'  id="upload_file_click" style="display:none"/>
+
+				</form>
+
 				<button onclick="disconnect_shell()"
-					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;"
-					type="submit"><img src="/assets/disconnect.png">
+				style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
+				type="submit"><img src="/assets/disconnect.png">
 					disconnect</button>
 				<button onclick="open_notes()" title="add notes to this session for example admin password"
 					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
@@ -102,6 +110,13 @@
 					<button onclick="open_obfuscate_path()" title="obfuscate paths to confuse blue teamer (Powershell only)"
 					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
 					type="submit"> obfuscate path</button>
+					<button onclick="document.getElementById('upload_file_id').click()" title="obfuscate paths to confuse blue teamer (Powershell only)"
+					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
+					type="submit"> upload file 📁</button>
+					<button onclick="open_process_list()" title="list all processes"
+					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
+					type="submit">Process list </button>
+
 					<div id="obfuscate_path_div"  style="display:none">
 						<br><br><br><br><br>
 						<div style="display: flex;
@@ -111,6 +126,30 @@
 						<input class="input-change-password" style="height: 33px ;width: 35%;" type=text id="obfuscate_path_id">&nbsp;&nbsp;
 						<button onclick="click_obfuscate_path()"
 						style="background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none" type="submit">obfuscate</button>
+					</div>
+					</div>
+					<div id="process_list_div"  style="display:none">
+						<br><br><br>
+						<button onclick="tableToCSV()"
+						style="background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey" type="submit">Export as csv</button>
+						<button onclick="process_list()"
+						style="background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey" type="submit">Refresh</button>
+						
+						<br><br><br>
+						
+						<div style="display: flex;
+						justify-content: center;
+						align-items: center;">
+						<br><br><br>
+						<table id="process_list_table" class="table_color">
+							<tr >
+								<th class="table_color">process name</th>
+								<th class="table_color">pid</th>
+								<th class="table_color">PPID</th>								
+							</tr>
+							<tr>
+							</tr>
+						</table>
 					</div>
 					</div>
 					<div id="notes_div" style="display:none">
@@ -146,7 +185,7 @@
 					greetings=" <- Please, select shell "></div>
 				<div style="height: 150%;width: 100%;" ng-repeat="(key, shell) in shells"
 					class="terminal-container fluid" angular-terminal="main-{{key}}" ng-show="currentShellId == key"
-					greetings=""></div>
+					greetings=""><h1></h1></div>
 			</div>
 		</div>
 	</div>
