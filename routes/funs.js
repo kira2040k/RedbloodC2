@@ -691,8 +691,17 @@ const check_same_id = (list_cookies,id)=>{
     }
 }
 
-const find_random_value = (values)=>{
+const find_random_value = (req,values)=>{
+    
+    if(req.headers.authorization){
+        return req.headers.authorization
+    }    
     return values[Object.keys(values)[0]]
+}
+const find_random_value_body = (values)=>{
+    
+    return values[Object.keys(values)[0]]
+
 }
 
 const is_admin = async(username)=>{
@@ -922,5 +931,6 @@ module.exports = {
     check_login_user_socket,
     get_all_by_username,
     add_user,
-    check_admin
+    check_admin,
+    find_random_value_body
 }

