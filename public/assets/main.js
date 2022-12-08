@@ -474,8 +474,64 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     table.deleteRow(tableHeaderRowCount);
 }
 }
+
+const checkAV_EDR = (processname) =>{
+    const list = [
+        {"EDR":"Windows Defender","procs":["defender","msmpeng"]},
+        {"EDR":"BitDefender","procs":["BitDefender","bdagent",'bdreinit','pdscan','BDSubWiz','pdiface']},
+        {"EDR":"Carbon Black","procs":["CarbonBlack","CbDefense",'CarbonBlackClientSetup']},
+        {"EDR":"Checkpoint","procs":["Checkpoint",'cpmsi_tool']},
+        {"EDR":"Crowdstrike EDR","procs":['CrowdStrike','windowssensor']},
+        {"EDR":"Cybereason","procs":['Cybereason','CybereasonRansomFreeServiceHost','CrAmTray','CybereasonSensor','Cybereason Sensor']},
+        {"EDR":"Elastic Endpoint Security","procs":['elastic-agent','elastic-endpoint','ElasticEndpoint']},
+        {"EDR":"ESET Endpoint Security","procs":['ESET','egui','ekrn','EHttpSrv','ecmd.exe','emu-']},
+        {"EDR":"FireEye","procs":["xagt",'FireEye']},
+        {"EDR":"Fortinet","procs":['FortiWad','EPCUserAvatar','FSSOMA','forticlient','fcwscd7','fortivpnst','fortiproxy','fortiwad',"Fortinet",'fortifw','fccomint','FSAEConfig','fortitray','fcappdb','fcwizard','fortiwf','fortiwadbd']},
+        {"EDR":"Kaspersky ","procs":["avpui",'avpsus','klnagent','klnsacwsrv','kl_platf','klnagwds']},
+        {"EDR":"Limacharlie","procs":["rphcp",'lc_sensor']},
+        {"EDR":"SentinelOne","procs":["SentinelAgent",'SentinelMonitor']},
+        {"EDR":"Sophos","procs":["SVRTgui",'SVRTcli','SCTCleanupService','Sophos','sargui','SavMain']},
+        {"EDR":"Malware Bytes","procs":["mbae",'mbae-svc','mbam']},
+        {"EDR":"McAfee","procs":['mcafee','McAfeeAgent','mfecanary','mfehidin','mfefire','MarSetup','MfeServiceMgr','mfeffcoreservice','MfeEpeSvc',"mcupdate",'FWInstCheck','mfewc']},
+        {"EDR":"Qualys Cloud Agent EDR","procs":["qualysagent",'QualysProxy','QualysAgentUI']},
+        {"EDR":"Symantec Endpoint Security","procs":["symantec",'symcorpu','symefasi','Norton','N360Downloader']},
+        {"EDR":"Trend Micro Deep Security","procs":['ufnavi','SfCtlCom',"pccntmon",'Clnrbin','AosUImanager']},
+
+    ]
+    for(n=0;n<list.length;n++) {
+        for(j=0;j<list[n].procs.length;j++){
+            if(processname.toLowerCase().includes(list[n].procs[j].toLocaleLowerCase())){
+                return list[n].EDR 
+            }
+
+        }
+    }
+    return ""
+}
+const vm_check = (processname)=>{
+    if(processname.toLowerCase().includes("vmware")){
+        return "vmware"
+    }
+    
+
+}
+
+const proc_check = (processname)=>{
+    const AV = checkAV_EDR(processname)
+    if(AV) return AV;
+    const vm = vm_check(processname)
+    if(vm) return vm
+    return ""
+}
+
 const process_list =async ()=>{
+    const number = get_number_of_shell()
+    if(number == undefined) {
+        alert("please select session")
+        return;
+    }
     clear_process_list()
+    
     fetch('/apis/http_command/', {
         method: 'POST',
         headers: {
@@ -488,12 +544,16 @@ const process_list =async ()=>{
             table.className = "table_color"
             for(i=0;i<response.length;i++){
                 var row = table.insertRow(i+1);
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                cell1.innerText = response[i].processname;
-                cell2.innerText = response[i].pid;
-                cell3.innerText = response[i].ppid;           
+                var processname = row.insertCell(0);
+                var info = row.insertCell(1);
+                var pid = row.insertCell(2);
+                var ppid = row.insertCell(3);
+
+                processname.innerText = response[i].processname;
+                info.innerText = proc_check(response[i].processname);
+
+                pid.innerText = response[i].pid;
+                ppid.innerText = response[i].ppid;           
         
             }
         
@@ -508,6 +568,8 @@ const process_list =async ()=>{
                 file += table.rows[i].cells[0].innerText + ","
                 file += table.rows[i].cells[1].innerText + ","
                 file += table.rows[i].cells[2].innerText + ","
+                file += table.rows[i].cells[3].innerText + ","
+
                 file+="\n"
         
             }

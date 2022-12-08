@@ -9,8 +9,8 @@
 	<meta name="author" content="">
 	<link rel="icon" href="../../favicon.ico">
 	<link rel="stylesheet" href="/assets/index.css">
-	
-    <link rel="stylesheet" href="../assets/profile.css">
+
+	<link rel="stylesheet" href="../assets/profile.css">
 
 	<title>RedBlood C2</title>
 </head>
@@ -23,12 +23,13 @@
 			elements[i].style.backgroundColor = document.getElementById("terminal_colorr").getAttribute("c");
 
 		}
-		
-		
+
+
 
 
 	}, 200)
 </script>
+
 <body ng-controller="MainController" style=background-color:<%= settings.colors.index_background %>>
 
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -65,13 +66,16 @@
 					<li class="header"><a>Shell list</a></li>
 					<li ng-class="{active: currentShellId == key}" ng-repeat="(key, shell) in shells | notDead"><a
 							ng-click="selectShell(key)">{{shell.ip}} #{{key}}
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src={{shell.os}} alt="" height="22" width="22"></a></li>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+								src={{shell.os}} alt="" height="22" width="22"></a></li>
 					<li ng-show="!haveNonDeadShells()"><a>No shells</a></li>
 					<% if (settings.offline_shells) { %>
 
 					<li class="header"><a>Offline shell list</a></li>
 					<li ng-class="{active: currentShellId == key}" ng-repeat="(key, shell) in shells | dead"><a
-							ng-click="selectShell(key)">{{shell.ip}} #{{key}} &nbsp;&nbsp;&nbsp;&nbsp;<button class="button"  id="{{key}}" onclick="delete_offline_shell(this.id)">hide</button></a> </li>
+							ng-click="selectShell(key)">{{shell.ip}} #{{key}} &nbsp;&nbsp;&nbsp;&nbsp;<button
+								class="button" id="{{key}}" onclick="delete_offline_shell(this.id)">hide</button></a>
+					</li>
 					<li ng-show="!haveDeadShells()"><a>No shells</a></li>
 					<% } %>
 
@@ -87,82 +91,125 @@
 					<datalist id="commands_datalist">
 					</datalist>
 
-					<button onclick="run_command()" title="select any module and click on the bug after that command will execute"
+					<button onclick="run_command()"
+						title="select any module and click on the bug after that command will execute"
 						style="float: left;width: 20%;padding: 10px;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;"
 						type="submit"><img src="https://cdn-icons-png.flaticon.com/24/78/78946.png"></button>
-						
-					</form> 
+
+					</form>
 
 				</div>
-				<form style="display:none" id="the_form" style="float:right;" action="/apis/http_upload_file" method="POST" enctype="multipart/form-data">
-					<input id='upload_file_id' onchange="send_file()" name="uploaded_file" value="upload_file_id" type='file' style="display:''"/>
-					<input type='submit'  id="upload_file_click" style="display:none"/>
+				<form style="display:none" id="the_form" style="float:right;" action="/apis/http_upload_file"
+					method="POST" enctype="multipart/form-data">
+					<input id='upload_file_id' onchange="send_file()" name="uploaded_file" value="upload_file_id"
+						type='file' style="display:''" />
+					<input type='submit' id="upload_file_click" style="display:none" />
 
 				</form>
+				
+				&nbsp;&nbsp;&nbsp;&nbsp;<br><br><br>
+				<button class="cybr-btn" onclick="open_notes()">
+					notes
+					<span aria-hidden class="cybr-btn__glitch">notes</span>
+				</button>
+				&nbsp;
 
-				<button onclick="disconnect_shell()"
-				style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
-				type="submit"><img src="/assets/disconnect.png">
-					disconnect</button>
-				<button onclick="open_notes()" title="add notes to this session for example admin password"
-					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
-					type="submit">📝 notes</button>
-					<button onclick="open_obfuscate_path()" title="obfuscate paths to confuse blue teamer (Powershell only)"
-					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
-					type="submit"> obfuscate path</button>
-					<button onclick="document.getElementById('upload_file_id').click()" title="obfuscate paths to confuse blue teamer (Powershell only)"
-					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
-					type="submit"> upload file 📁</button>
-					<button onclick="open_process_list()" title="list all processes"
-					style="float:right;background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none;cursor: pointer;margin: 0.01% 0.4%;"
-					type="submit">Process list </button>
+				<button class="cybr-btn" hidden onclick="document.getElementById('upload_file_id').click()">
+					Upload file 📁
 
-					<div id="obfuscate_path_div"  style="display:none">
-						<br><br><br><br><br>
-						<div style="display: flex;
+					<span aria-hidden class="cybr-btn__glitch">Upload file 📁</span>
+				</button>
+				<button class="cybr-btn" onclick="document.getElementById('upload_file_id').click()">
+					Upload file 📁
+
+					<span aria-hidden class="cybr-btn__glitch">Upload file 📁</span>
+				</button>
+
+				&nbsp;
+				<button class="cybr-btn" onclick="open_obfuscate_path()">
+					obfuscate path
+					<span aria-hidden class="cybr-btn__glitch">Buttons</span>
+				</button>
+				&nbsp;
+				<button class="cybr-btn" onclick="open_process_list()">
+					Process list
+					<span aria-hidden class="cybr-btn__glitch">Buttons</span>
+				</button>
+				&nbsp;
+				
+				<button class="cybr-btn" onclick="disconnect_shell()">
+					disconnect
+					<span aria-hidden class="cybr-btn__glitch">disconnect</span>
+				</button>
+
+				<div id="obfuscate_path_div" style="display:none">
+					<br><br><br><br><br>
+					<div style="display: flex;
 						justify-content: center;
 						align-items: center;">
 						<br><br><br>
-						<input class="input-change-password" style="height: 33px ;width: 35%;" type=text id="obfuscate_path_id">&nbsp;&nbsp;
-						<button onclick="click_obfuscate_path()"
-						style="background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none" type="submit">obfuscate</button>
-					</div>
-					</div>
-					<div id="process_list_div"  style="display:none">
-						<br><br><br>
-						<button onclick="tableToCSV()"
-						style="background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey" type="submit">Export as csv</button>
-						<button onclick="process_list()"
-						style="background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey" type="submit">Refresh</button>
-						
-						<br><br><br>
-						
-						<div style="display: flex;
+
+						<input class="input-change-password" style="height: 33px ;width: 35%;" type=text
+							id="obfuscate_path_id">&nbsp;&nbsp;
+						<button class="cybr-btn" onclick="click_obfuscate_path()">
+							obfuscate
+							<span aria-hidden class="cybr-btn__glitch">obfuscate</span>
+						</button>
+						</div>
+				</div>
+				<div id="process_list_div" style="display:none">
+					<br><br><br>
+					<button class="cybr-btn" onclick="tableToCSV('process_list_table','proc')">
+						Export as csv
+						<span aria-hidden class="cybr-btn__glitch">Export as csv</span>
+					</button>
+					<button hidden class="cybr-btn" onclick="process_list()">
+						Refresh
+						<span aria-hidden class="cybr-btn__glitch">Refresh</span>
+					</button>
+					&nbsp;
+
+					<button class="cybr-btn" onclick="process_list()">
+						Refresh
+						<span aria-hidden class="cybr-btn__glitch">Refresh</span>
+					</button>
+					
+					<br><br><br>
+
+					<div style="display: flex;
 						justify-content: center;
 						align-items: center;">
 						<br><br><br>
 						<table id="process_list_table" class="table_color">
-							<tr >
+							<tr>
 								<th class="table_color">process name</th>
+								<th class="table_color">info</th>
+
 								<th class="table_color">pid</th>
-								<th class="table_color">PPID</th>								
+								<th class="table_color">PPID</th>
 							</tr>
 							<tr>
 							</tr>
 						</table>
 					</div>
-					</div>
-					<div id="notes_div" style="display:none">
+				</div>
+				<div id="notes_div" style="display:none">
 					<br><br><br><br><br>
 					<div style="display: flex;
 					justify-content: center;
 					align-items: center;">
-					<br><br><br>
-					<button onclick="add_note()"
-					style="background: rgba(215, 0, 0, 0.654);color: white;font-size: 17px;border: 1px solid grey;border-left: none" type="submit">📝 add note</button>
-				</div>
+						<br><br><br>
+						
+								<button class="cybr-btn" onclick="add_note()">
+									📝 add
+								note
+									<span aria-hidden class="cybr-btn__glitch">📝 add
+										note</span>
+								</button>
+						<br>
+					</div>
 					<table id="notes_table">
-						<tr >
+						<tr>
 							<th class="table_color">username</th>
 							<th class="table_color">note</th>
 							<th class="table_color">action</th>
@@ -180,17 +227,19 @@
 					<button class="button-35" role="button" onclick="copy_command()">Copy command</button><br><br>
 				</div>
 
-				<div style="height: 150%;width: 100%;color:<%= settings.colors.terminal_color %>;background-color:<%= settings.colors.terminal_background_color %>;"
+				<div style="height: 400px;width: 100%;resize:both;overflow:auto;color:<%= settings.colors.terminal_color %>;background-color:<%= settings.colors.terminal_background_color %>;"
 					class="terminal-container fluid" angular-terminal="main" prompt=" " ng-show="!shellSelected()"
 					greetings=" <- Please, select shell "></div>
-				<div style="height: 150%;width: 100%;" ng-repeat="(key, shell) in shells"
+				<div style="height: 400px;width: 100%;resize:both;overflow:auto;" ng-repeat="(key, shell) in shells"
 					class="terminal-container fluid" angular-terminal="main-{{key}}" ng-show="currentShellId == key"
-					greetings=""><h1></h1></div>
+					greetings="">
+					<h1></h1>
+				</div>
 			</div>
 		</div>
 	</div>
 	<script defer src="/assets/main.js"></script>
-	<script  defer src="/assets/bundle.js"></script>
+	<script defer src="/assets/bundle.js"></script>
 
 
 </body>

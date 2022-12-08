@@ -126,8 +126,6 @@ module.exports = function (app) {
     router.get('/change_username',[funs.check_login_user,funs.check_admin],async function (req, res) {
         
         
-            console.log(req.query.username)
-            console.log(req.query.new_username)
             funs.change_username(req.query.username,req.query.new_username)
             res.send("done")
     })

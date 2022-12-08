@@ -50,8 +50,11 @@ password: admin
 
 ## New features: 
 <ul>
+<li>New UI</li>
+
 <li>http / https payloads </li>
 <li>FUD macro</li>
+<li>nim & golang & C# & powershell payloads </li>
 <li>FUD http/https powershell</li>
 <li>manage sessions</li>
 <li>admin and users </li>

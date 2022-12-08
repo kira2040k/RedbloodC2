@@ -782,8 +782,6 @@ function change_user_role(username,role) {
 
 }
 function change_username(username,new_username) {
-    console.log(username)
-    console.log(new_username)
     return new Promise(resolve => {
     db.run("UPDATE users SET  username = (?) WHERE username = (?)", [new_username, username], function (err) {
         if (err) {

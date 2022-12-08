@@ -1,0 +1,264 @@
+<div id="change_password_form" style="display:none" method="post">
+    <br>
+    <div class="success-msg" id="change_password_status" style="display:none">
+        <i id="change_password_message"></i>
+
+    </div>
+    <input class="input-change-password" type=text id=old_password
+        placeholder="Enter current password">
+    <input class="input-change-password" type=text id=new_password
+        placeholder="Enter new password"><br><br><br>
+        <a class="modern_button" onclick="change_password_send()" style="--clr:#851804" ><span>Submit </span><i></i></a>
+        <br><br><br><br>
+
+</div>
+
+<div id="payloads_div" style="display:none" method="post">
+    <br><br>
+    <a class="modern_button" onclick="open_button('csharp_div')" style="--clr:#851804" ><span>C# shell</span><i></i></a>
+
+    <a class="modern_button" onclick="open_button('nim_div')" style="--clr:#851804" ><span>Nim shell</span><i></i></a>
+    &nbsp;
+    <a class="modern_button" onclick="open_button('go_div')" style="--clr:#851804" ><span>Go shell</span><i></i></a>
+    &nbsp;
+    <a class="modern_button" onclick="open_button('powershell_div')" style="--clr:#851804" ><span>powershell </span><i></i></a>
+    &nbsp;
+    <a class="modern_button" onclick="open_button('macro_div')" style="--clr:#851804" ><span>macro </span><i></i></a>
+    &nbsp;
+    <a class="modern_button" onclick="open_button('open_autoit_div')" style="--clr:#851804" ><span>autoit shell</span><i></i></a>
+
+  
+        <br>
+        <br>
+        <br>
+
+    <div class="success-msg" id="auto_command_status" style="display:none">
+        <i id="auto_command_message"></i>
+
+    </div>
+    <div id="csharp_div" style="display:none" method="post">
+        <br>
+        <div class="success-msg" id="change_password_status" style="display:none">
+            <i id="change_password_message"></i>
+        </div>
+            <input class="input-change-password" type=text id=csharp_url placeholder="url...">
+            &nbsp;
+            <input class="input-change-password" type=text id=csharp_time placeholder="sleep time">
+            &nbsp;
+
+            <input class="input-change-password" type=text id=csharp_random_url placeholder="any valid url for sandbox bypass">
+
+            <br><br><br>
+            <a class="modern_button" onclick="c_sharp_generate()" style="--clr:#851804" ><span>Submit </span><i></i></a>
+            <br><br>
+        <br>
+        <br>
+        <textarea id="csharp_textarea"></textarea>
+        </div>
+    <div id="go_div" style="display:none" method="post">
+        <br>
+        <div class="success-msg" id="change_password_status" style="display:none">
+            <i id="change_password_message"></i>
+        </div>
+            <input class="input-change-password" type=text id=go_url placeholder="url...">
+            &nbsp;
+            <input class="input-change-password" type=text id=go_time placeholder="sleep time">
+            &nbsp;
+
+            <input class="input-change-password" type=text id=go_random_url placeholder="any valid url for sandbox bypass">
+
+            <br><br><br>
+            <a class="modern_button" onclick="go_generate()" style="--clr:#851804" ><span>Submit </span><i></i></a>
+            <br><br>
+        <br>
+        <br>
+        <textarea id="go_textarea"></textarea>
+        </div>
+        <div id="nim_div" style="display:none" method="post">
+            <br>
+            <div class="success-msg" id="change_password_status" style="display:none">
+                <i id="change_password_message"></i>
+            </div>
+                <input class="input-change-password" type=text id=nim_url placeholder="url...">
+                &nbsp;
+                <input class="input-change-password" type=text id=nim_time placeholder="sleep time">
+                &nbsp;
+    
+                <input class="input-change-password" type=text id=nim_random_url placeholder="any valid url for sandbox bypass">
+    
+                <br><br><br>
+                <a class="modern_button" onclick="nim_generate()" style="--clr:#851804" ><span>Submit </span><i></i></a>
+                <br><br>
+            <br>
+            <br>
+            <textarea id="nim_textarea"></textarea> 
+    </div>
+    <div id="macro_div" style="display:none" method="post">
+        <br>
+        <div class="success-msg" id="change_password_status" style="display:none">
+            <i id="change_password_message"></i>
+        </div>
+            <input class="input-change-password" type=text id=macro_url placeholder="url of executable">
+            <br><br><br>
+            <a class="modern_button" onclick="macro_button()" style="--clr:#851804" ><span>Submit </span><i></i></a>
+            <br><br>
+        <br>
+        <br>
+        <textarea id="marco_textarea"  >
+            </textarea>
+        
+    </div>    
+</div>
+    
+<div id="auto_command_div" style="display:none" method="post">
+    <br><br>
+    <a class="modern_button" onclick="open_button('auto_command_add_div')" style="--clr:#851804" ><span>add module</span><i></i></a>
+    <a class="modern_button" onclick="open_button('auto_command_list_div')" style="--clr:#851804" ><span>list all modules</span><i></i></a>
+    <a class="modern_button" onclick="open_button('auto_command_delete_div')" style="--clr:#851804" ><span>delete module</span><i></i></a>
+
+  
+        <br>
+        <br>
+        <br>
+
+    <div class="success-msg" id="auto_command_status" style="display:none">
+        <i id="auto_command_message"></i>
+
+    </div>
+    <div id="auto_command_add_div" style="display:none" method="post">
+        <input class="input-change-password" type=text id="auto_command_title"
+        placeholder="title...">
+    <input class="input-change-password" type=text id="auto_command_des"
+        placeholder="description...">
+        <br> <br> <br>
+        <textarea id="auto_command_command" class="form-control" placeholder="command.."></textarea>
+        <br><br>
+        <a class="modern_button" onclick="auto_command_send()" style="--clr:#851804" ><span>Submit </span><i></i></a>
+
+        <br><br><br>
+
+    </div>
+    <div id="auto_command_list_div" style="display:none" method="post">
+        <table class="modern_table">
+            <tr>
+                <th>title</th>
+                <th>description</th>
+                <th>command</th>
+
+            </tr>
+            <% for(var i=0; i < auto_command_list.length; i++) { %>
+            <tr>
+                <td><%= auto_command_list[i].title %></td>
+                <td><%= auto_command_list[i].des %></td>
+                <td style="word-break:break-all;"><%= auto_command_list[i].command %></td>
+
+            </tr>
+            <% } %>
+        </table>
+
+    </div>
+    <div id="auto_command_delete_div" style="display:none" method="post">
+        <input class="input-change-password" type=text id="auto_command_delete_title"
+        placeholder="title...">
+        <a class="modern_button" onclick="auto_command_delete_send()" style="--clr:#851804" ><span>Submit </span><i></i></a>
+        <br><br>
+    </div>
+</div>
+<div id="open_autoit_div" style="display:none" method="post">
+    <br>
+    <div class="success-msg" id="change_password_status" style="display:none">
+        <i id="change_password_message"></i>
+
+    </div>
+    <input class="input-change-password" type=text id=powershell_link
+        placeholder="powershell link"><br><br>
+        <br>
+        <a class="modern_button" onclick="autoit_run()" style="--clr:#851804" ><span>Submit </span><i></i></a>
+
+    <br><br><br>
+    <textarea id="autoit_textarea_form" class="form-control">
+
+
+    </textarea>
+</div>
+<div id="open_on_connection_div" style="display:none" method="post">
+    <br>
+    <br>
+    <br>
+    <button class="button-34" role="button"
+        onclick="open_button('open_on_connection_command_add_div')">add command</button>
+    <button class="button-34" role="button"
+        onclick="open_button('open_on_connection_command_list_div')">list all command</button>
+    <button class="button-34" role="button"
+        onclick="open_button('open_on_connection_command_delete_div')">delete command</button>
+
+    <br>
+    <br>
+    <br>
+    <div class="success-msg" id="on_connection_command_status" style="display:none">
+        <i id="on_connection_command_message"></i>
+
+    </div>
+    <br>
+    <div id="open_on_connection_command_add_div" style="display:none" method="post">
+        <input class="input-change-password" type=text
+            id="on_connection_command_add_title" placeholder="title...">
+        <input class="input-change-password" type=text
+            id="on_connection_command_add_des" placeholder="description...">
+        <input class="input-change-password" type=text
+            id="on_connection_command_add_command" placeholder="command...">
+        <button class="button-62" role="button"
+            onclick="on_connection_command_add_send()">Add</button>
+
+    </div>
+    <div id="open_on_connection_command_list_div" style="display:none" method="post">
+        
+        <table>
+            <tr>
+                <th>id</th>
+                <th>title</th>
+                <th>description</th>
+                <th>command</th>
+
+            </tr>
+            <% for(var i=0; i < on_connection_command_list.length; i++) { %>
+            <tr>
+                <td><%= on_connection_command_list[i].id %></td>
+                <td><%= on_connection_command_list[i].title %></td>
+                <td><%= on_connection_command_list[i].description %></td>
+                <td><%= on_connection_command_list[i].command %></td>
+
+            </tr>
+            <% } %>
+        </table>
+
+
+    </div>
+    <div id="open_on_connection_command_delete_div" style="display:none" method="post">
+        <input class="input-change-password" type=text
+            id="on_connection_command_delete_id" placeholder="id">
+            <button class="button-62" role="button"
+            onclick="on_connection_command_delete_send()">Add</button>
+
+    </div>
+</div>
+<div id="powershell_div" style="display:none" method="post">
+    <br>
+     <!-- <select class="button-34" style="font-size:90%" onchange=change_powershell_type() class="input-change-password" id="powershell_type">
+        <option  value="basic">basic</option>
+        <option  value="full">full</option>
+      </select>&nbsp;&nbsp;<br><br>  -->
+
+    <input class="input-change-password" type=text id=powershell_ip
+        placeholder="Host..">
+     <input class="input-change-password" type=text id=time_sleep
+        placeholder="Sleep time" title="sleep time between requests">
+       
+        <br><br><br>
+    
+        <a class="modern_button" onclick="generate_powershell('auto_command_div')" style="--clr:#851804" ><span>generate</span><i></i></a>
+
+        <br><br><br>
+        <textarea id="powershell_textarea" placeholder="http & https reverse shell" class="form-control"></textarea>
+
+</div>

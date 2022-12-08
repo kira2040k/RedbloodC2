@@ -88,7 +88,7 @@
 
 	window.resize = function() {
 		$(".fluid").each(function(id, element){
-			$(element).height($(window).height() - $(element).offset().top - 50);
+			// $(element).height($(window).height() - $(element).offset().top - 50);
 		});
 	};
 
@@ -20974,14 +20974,12 @@
 	 * ```js
 	 * function linkingFn(scope, elm, attrs, ctrl) {
 	 *   // get the attribute value
-	 *   console.log(attrs.ngModel);
 	 *
 	 *   // change the attribute
 	 *   attrs.$set('ngModel', 'new value');
 	 *
 	 *   // observe changes to interpolated attribute
 	 *   attrs.$observe('ngModel', function(value) {
-	 *     console.log('ngModel has changed value to ' + value);
 	 *   });
 	 * }
 	 * ```
@@ -27679,7 +27677,6 @@
 	      }
 
 	      // we are IE which either doesn't have window.console => this is noop and we do nothing,
-	      // or we are IE where console.log doesn't have apply so we log at least first 2 args
 	      return function(arg1, arg2) {
 	        logFn(arg1, arg2 == null ? '' : arg2);
 	      };
@@ -39965,7 +39962,6 @@
 	            getAndClearSevereErrors().then(function(filteredLog) {
 	              expect(filteredLog.length).toEqual(0);
 	              if (filteredLog.length) {
-	                console.log('browser console errors: ' + util.inspect(filteredLog));
 	              }
 	            });
 	          }
@@ -73740,7 +73736,6 @@
 			$scope.shells = {};
 
 			$scope.haveNonDeadShells = function(){
-				// console.log($filter('notDead')($scope.shells));
 
 				return Object.keys($filter('notDead')($scope.shells)).length != 0;
 			}
