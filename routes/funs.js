@@ -513,7 +513,7 @@ const fake_headers =  (req,res,next) =>{
 
 }
 const fake_content_len = ()=>{
-    const number = Math.random() * (900 - 50) + 900
+    const number = Math.random() * (1900 - 50) + 1900
     let string = ""
     for(i=0;i<number;i++){
         string+= " "

